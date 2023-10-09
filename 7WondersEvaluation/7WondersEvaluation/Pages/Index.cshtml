@@ -1,0 +1,68 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "7 Wonders Evaluation";
+}
+
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*" />
+    <button type="submit">Upload</button>
+</form>
+
+@if (Model.ImagePath != null)
+{
+    <div id="imageContainer" style="position: relative;">
+        <img src="@Model.ImagePath" alt="Uploaded Image"  width="400" height="300" id="predictedImage" style="position: absolute;"  />
+        <canvas id="canvas"></canvas>
+    </div>
+}
+
+@if (Model.Result != null)
+{
+    @section Scripts {
+    <script>        
+        console.log("Result: @Model.Result");
+        var predictions = @Json.Serialize(Model.Result.Predictions);  // Assuming Predictions are in your Razor model
+        var imageElement = document.getElementById('predictedImage');
+        var canvas = document.getElementById('canvas');
+
+        if (imageElement != null && canvas != null) {
+            var imageStyle = getComputedStyle(imageElement);
+
+            // Get the image's position
+            var imageTop = parseFloat(imageStyle.top);
+            var imageLeft = parseFloat(imageStyle.left);
+            canvas.style.position = 'absolute';
+            canvas.style.top = imageTop + 'px';
+            canvas.style.left = imageLeft + 'px';
+            canvas.width = imageElement.width;
+            canvas.height = imageElement.height;
+            canvas.style.zIndex = '1';
+
+            var ctx = canvas.getContext('2d');
+
+            predictions.forEach(function(prediction) {
+                var boundingBox = prediction.boundingBox;
+                
+                // Coordinates are typically normalized, so multiply by image size
+                var left = boundingBox.left * imageElement.width;
+                var top = boundingBox.top * imageElement.height;
+                var width = boundingBox.width * imageElement.width;
+                var height = boundingBox.height * imageElement.height;
+
+                // Draw bounding box
+                ctx.beginPath();
+                ctx.rect(left, top, width, height);
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = 'red';  // Box color
+                ctx.stroke();
+
+                // Draw label
+                ctx.font = '16px Arial';
+                ctx.fillStyle = 'red';
+                ctx.fillText(prediction.tagName, left, top - 10);
+            });
+        }
+    </script>
+    }
+}

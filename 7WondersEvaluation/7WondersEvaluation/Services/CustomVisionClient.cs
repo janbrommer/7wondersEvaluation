@@ -1,0 +1,54 @@
+using System;
+using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+
+public class CustomVisionClient
+{
+    private readonly HttpClient _httpClient;
+    private readonly string _predictionKey;
+
+    public CustomVisionClient(HttpClient httpClient, string predictionKey)
+    {
+        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        _predictionKey = predictionKey ?? throw new ArgumentNullException(nameof(predictionKey));
+    }
+
+    public async Task<ApiResult?> PredictImageAsync(
+        string projectId,
+        string publishedName,
+        Stream imageStream,
+        int? numTagsPerBoundingBox = null,
+        string? application = null)
+    {
+        if (imageStream == null) throw new ArgumentNullException(nameof(imageStream));
+        if (publishedName == null) throw new ArgumentNullException(nameof(publishedName));
+        string your_endpoint = "exercise-jbr2.cognitiveservices.azure.com";        
+        // Construct the URL.
+        string url = $"https://{your_endpoint}/customvision/v3.1/Prediction/{projectId}/detect/iterations/{publishedName}/image";
+        if (numTagsPerBoundingBox.HasValue)
+        {
+            url += $"?numTagsPerBoundingBox={numTagsPerBoundingBox.Value}";
+        }
+        if (!string.IsNullOrEmpty(application))
+        {
+            url += (url.Contains("?") ? "&" : "?") + $"application={application}";
+        }
+
+        // Prepare the HTTP request.
+        using var content = new StreamContent(imageStream);
+        content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+        _httpClient.DefaultRequestHeaders.Add("Prediction-key", _predictionKey);
+        
+        // Send the HTTP request and get the response.
+        using var response = await _httpClient.PostAsync(url, content);
+        response.EnsureSuccessStatusCode();
+
+        // Deserialize the response.
+        // Note: Ensure you have a class (ApiResult) matching the response schema.
+        return await response.Content.ReadFromJsonAsync<ApiResult>();
+    }
+
+}
+
