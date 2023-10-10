@@ -19,7 +19,7 @@ public class CustomVisionClient
         string projectId,
         string publishedName,
         Stream imageStream,
-        int? numTagsPerBoundingBox = null,
+        int? numTagsPerBoundingBox = 1,
         string? application = null)
     {
         if (imageStream == null) throw new ArgumentNullException(nameof(imageStream));
@@ -47,7 +47,22 @@ public class CustomVisionClient
 
         // Deserialize the response.
         // Note: Ensure you have a class (ApiResult) matching the response schema.
-        return await response.Content.ReadFromJsonAsync<ApiResult>();
+        return filterResult(await response.Content.ReadFromJsonAsync<ApiResult>(), 0.7);
+    }
+
+    private ApiResult filterResult(ApiResult apiResult, double minProbability)
+    {
+        List<Prediction> predictions = apiResult.Predictions;
+        List<Prediction> filteredPredictions = new List<Prediction>();
+        foreach (var prediction in predictions)
+        {
+            if (prediction.Probability > minProbability)
+            {
+                filteredPredictions.Add(prediction);
+            }
+        }
+        apiResult.Predictions = filteredPredictions;
+        return apiResult;
     }
 
 }

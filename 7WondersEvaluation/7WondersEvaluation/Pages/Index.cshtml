@@ -12,8 +12,60 @@
 @if (Model.ImagePath != null)
 {
     <div id="imageContainer" style="position: relative;">
-        <img src="@Model.ImagePath" alt="Uploaded Image"  width="400" height="300" id="predictedImage" style="position: absolute;"  />
+        <img src="@Model.ImagePath" alt="Uploaded Image"  width="400" height="300" id="predictedImage" style="position: relative;"  />
         <canvas id="canvas"></canvas>
+    </div>
+}
+
+@if (Model.Evaluation != null)
+{
+    <div id="tableContainer" style="margin-top: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Attribute</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Name</td>
+                    <td>@Model.Evaluation.Name</td>
+                </tr>
+                <tr>
+                    <td>Red</td>
+                    <td>@Model.Evaluation.Red</td>
+                </tr>
+                <tr>
+                    <td>Coins</td>
+                    <td>@Model.Evaluation.Coins</td>
+                </tr>
+                <tr>
+                    <td>Expansion Stages</td>
+                    <td>@Model.Evaluation.ExpansionStages</td>
+                </tr>
+                <tr>
+                    <td>Blue</td>
+                    <td>@Model.Evaluation.Blue</td>
+                </tr>
+                <tr>
+                    <td>Yellow</td>
+                    <td>@Model.Evaluation.Yellow</td>
+                </tr>
+                <tr>
+                    <td>Violet</td>
+                    <td>@Model.Evaluation.Violet</td>
+                </tr>
+                <tr>
+                    <td>Green</td>
+                    <td>@Model.Evaluation.Green</td>
+                </tr>
+                <tr>
+                    <td>Sum</td>
+                    <td>@Model.Evaluation.Sum</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 }
 
