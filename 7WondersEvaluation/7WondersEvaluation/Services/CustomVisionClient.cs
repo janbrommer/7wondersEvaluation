@@ -44,6 +44,7 @@ public class CustomVisionClient
         // Send the HTTP request and get the response.
         using var response = await _httpClient.PostAsync(url, content);
         response.EnsureSuccessStatusCode();
+        
 
         // Deserialize the response.
         // Note: Ensure you have a class (ApiResult) matching the response schema.

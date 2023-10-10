@@ -1,12 +1,12 @@
 public class EvaluationData
 {
-    public string Name { get; set; }
-    public int Red { get; set; }
-    public int Coins { get; set; }
-    public int ExpansionStages { get; set; }
-    public int Blue { get; set; }
-    public int Yellow { get; set; }
-    public int Violet { get; set; }
-    public int Green { get; set; }
-    public int Sum { get; set; }
+    public string Name { get; set; } = "";
+    public int Red { get; set; } = 0;
+    public int Coins { get; set; } = 0;
+    public int ExpansionStages { get; set; } = 0;
+    public int Blue { get; set; } = 0;
+    public int Yellow { get; set; } = 0;
+    public int Violet { get; set; } = 0;
+    public int Green { get; set; } = 0;
+    public int Sum { get; set; } = 0;
 }
