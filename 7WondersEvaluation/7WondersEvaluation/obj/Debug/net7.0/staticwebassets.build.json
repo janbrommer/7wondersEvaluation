@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "A48jiiK4QKpBaHPnNJsRyjOVucKwZ+kPQ3r5cbRS2I0=",
+  "Hash": "p5JKrytsi8fbeQXlNXrXi9+ntz5jAZQQ11C99sWThQw=",
   "Source": "7WondersEvaluation",
   "BasePath": "_content/7WondersEvaluation",
   "Mode": "Default",
@@ -1086,6 +1086,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\IMG_20231009_223934_3.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\bigfo\\Documents\\7WondersApp\\7wondersEvaluation\\7WondersEvaluation\\7WondersEvaluation\\wwwroot\\uploads\\IMG_20231010_211630_2.jpg",
+      "SourceId": "7WondersEvaluation",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\bigfo\\Documents\\7WondersApp\\7wondersEvaluation\\7WondersEvaluation\\7WondersEvaluation\\wwwroot\\",
+      "BasePath": "_content/7WondersEvaluation",
+      "RelativePath": "uploads/IMG_20231010_211630_2.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\IMG_20231010_211630_2.jpg"
     },
     {
       "Identity": "C:\\Users\\bigfo\\Documents\\7WondersApp\\7wondersEvaluation\\7WondersEvaluation\\7WondersEvaluation\\wwwroot\\uploads\\Semestergebuehren_2021.PNG",

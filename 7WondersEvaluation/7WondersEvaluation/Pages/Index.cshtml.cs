@@ -34,7 +34,7 @@ public class IndexModel : PageModel
     public async Task<IActionResult> OnPostAsync()
     {
         string projectId = "37ee22ef-a721-4c36-b18b-5ee18dc24edf";
-        string publishedName = "Iteration1";
+        string publishedName = "Iteration2";
         var image = Request.Form.Files.GetFile("image");
 
         if (image != null && image.Length > 0)
