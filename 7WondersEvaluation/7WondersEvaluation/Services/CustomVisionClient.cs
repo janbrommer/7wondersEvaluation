@@ -53,8 +53,12 @@ public class CustomVisionClient
 
     private ApiResult filterResult(ApiResult apiResult, double minProbability)
     {
-        List<Prediction> predictions = apiResult.Predictions;
+        List<Prediction> predictions = apiResult.Predictions ?? new List<Prediction>();
         List<Prediction> filteredPredictions = new List<Prediction>();
+        if (predictions.Count == 0)
+        {
+            return apiResult;
+        }
         foreach (var prediction in predictions)
         {
             if (prediction.Probability > minProbability)

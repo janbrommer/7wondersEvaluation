@@ -12,7 +12,7 @@ public class CalcVictoryPoints{
         evaluationData.Name = "Test";
         evaluationData.Red = calcRed();
         evaluationData.Coins = calcCoin();
-        evaluationData.ExpansionStages = 0;
+        evaluationData.ExpansionStages = calcExpa();
         evaluationData.Blue = 0;
         evaluationData.Yellow = 0;
         evaluationData.Violet = 0;
@@ -62,6 +62,29 @@ public class CalcVictoryPoints{
 
         return  coinCount / 3;
 
+    }
+    private int calcExpa()
+    {
+        int expaSum = 0;
+        
+        // Access the TagToValueMapping dictionary from the static class
+        Dictionary<string, int> tagToValueMapping = MappingDictionary.ExpaTagToValueMapping;
+        if (_result.Predictions == null)
+        {
+            return expaSum;
+        }
+        foreach (var prediction in _result.Predictions)
+        {
+            // Check if the tag name exists in the dictionary
+            if (tagToValueMapping.TryGetValue(prediction.TagName, out int tagValue))
+            {
+                // If it does, add the value to the sum
+                expaSum += tagValue;;
+                
+            }
+        }
+
+        return expaSum;
     }
 }
     

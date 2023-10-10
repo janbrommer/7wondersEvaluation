@@ -38,8 +38,8 @@ public class Prediction
 {
     public double Probability { get; set; }
     public Guid TagId { get; set; }
-    public string? TagName { get; set; }
-    public BoundingBox? BoundingBox { get; set; }
+    public string TagName { get; set; }
+    public BoundingBox BoundingBox { get; set; }
     public string? TagType { get; set; }
 }
 
