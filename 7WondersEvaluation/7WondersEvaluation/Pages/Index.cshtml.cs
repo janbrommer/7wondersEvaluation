@@ -18,7 +18,7 @@ public class IndexModel : PageModel
     private readonly ILogger<IndexModel> _logger;
 
     public string? ImagePath { get; private set; }
-    public ApiResult Result { get; private set; }
+    public ApiResult? Result { get; private set; }
     public EvaluationData? Evaluation { get; private set; }
 
     public IndexModel(ILogger<IndexModel> logger, CustomVisionClient customVisionClient)
@@ -46,7 +46,7 @@ public class IndexModel : PageModel
             }
 
             ImagePath = "/" + imagePath;
-            Result = await _customVisionClient.PredictImageAsync(projectId, publishedName, image.OpenReadStream());
+            Result = await _customVisionClient.PredictImageAsync(projectId, publishedName, image.OpenReadStream()) ?? throw new Exception("Failed to get result.");
             CalcVictoryPoints calcVictoryPoints = new CalcVictoryPoints(Result);
             Evaluation = calcVictoryPoints.createEvaluationData();
             Console.WriteLine(Result);

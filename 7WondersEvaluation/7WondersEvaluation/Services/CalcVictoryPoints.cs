@@ -8,15 +8,17 @@ public class CalcVictoryPoints{
 
     public EvaluationData createEvaluationData()
     {
-        EvaluationData evaluationData = new EvaluationData();
-        evaluationData.Name = "Test";
-        evaluationData.Red = calcRed();
-        evaluationData.Coins = calcCoin();
-        evaluationData.ExpansionStages = calcExpa();
-        evaluationData.Blue = calcBlue();
-        evaluationData.Yellow = 0;
-        evaluationData.Violet = 0;
-        evaluationData.Green = calcGreen();
+        EvaluationData evaluationData = new EvaluationData
+        {
+            Name = "Test",
+            Red = calcRed(),
+            Coins = calcCoin(),
+            ExpansionStages = calcExpa(),
+            Blue = calcBlue(),
+            Yellow = calcYellow(),
+            Violet = 0,
+            Green = calcGreen()
+        };
         evaluationData.Sum = evaluationData.Red + evaluationData.Coins + evaluationData.ExpansionStages + evaluationData.Blue + evaluationData.Yellow + evaluationData.Violet + evaluationData.Green;
         return evaluationData;
     }
@@ -150,8 +152,49 @@ public class CalcVictoryPoints{
             // If it does, add the value to the sum                
                         
         }
+        Console.WriteLine("circle: " + circle);
+        Console.WriteLine("gear: " + gear);
+        Console.WriteLine("stone: " + stone);
+        Console.WriteLine("choice: " + choice);            
         int Sum = max(getGreemValue(circle + choice, gear, stone),getGreemValue(circle, gear + choice, stone), getGreemValue(circle, gear, stone + choice));
         return Sum;
+    }
+    
+    private int calcYellow(){
+        int yellowCount = 0;
+        foreach (var prediction in _result.Predictions)
+        {
+            // Check if the tag name exists in the dictionary                    
+            if (prediction.TagName == "yellow_brown")
+            {
+                yellowCount += count("brown");
+            }else if (prediction.TagName == "yellow_grey")
+            {
+                yellowCount += count("grey");
+            }else if (prediction.TagName == "yellow_yellow")
+            {
+                yellowCount += count("yellow");
+            }else if (prediction.TagName == "yellow_expa"){
+                yellowCount += count("expa");
+            }
+        }
+        return yellowCount;
+    }
+
+    private int count(String prefix){
+        int count = 0;    
+        if (_result?.Predictions != null)
+        {       
+            foreach (var prediction in _result.Predictions)
+            {
+                // Check if the tag name exists in the dictionary                    
+                if (prediction.TagName.StartsWith(prefix))
+                {
+                    count += 1;
+                }
+            }
+        }
+        return count;
     }
 
     private int getGreemValue(int circle, int gear, int stone){
