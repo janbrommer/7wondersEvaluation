@@ -28,4 +28,16 @@ public static class MappingDictionary
         { "expa_7", 7}
         // Add more key-value pairs as needed
     };
+
+    public static readonly Dictionary<string, int> BlueTagToValueMapping = new Dictionary<string, int>
+    {
+        { "blue_2", 2 },
+        { "blue_3", 3 },
+        { "blue_4", 4 },
+        { "blue_5", 5 },
+        { "blue_6", 6 },
+        { "blue_7", 7 },
+        { "blue_8", 8}
+        // Add more key-value pairs as needed
+    };
 }

@@ -43,12 +43,17 @@ public class CustomVisionClient
         
         // Send the HTTP request and get the response.
         using var response = await _httpClient.PostAsync(url, content);
-        response.EnsureSuccessStatusCode();
-        
-
+        response.EnsureSuccessStatusCode();                
         // Deserialize the response.
         // Note: Ensure you have a class (ApiResult) matching the response schema.
-        return filterResult(await response.Content.ReadFromJsonAsync<ApiResult>(), 0.7);
+        var apiResult = await response.Content.ReadFromJsonAsync<ApiResult>();
+        if (apiResult != null)
+        {
+            return filterResult(apiResult, 0.7);
+        }else 
+        {
+            throw new Exception("Kein gültiges Ergebnis vorhanden."); // Hier wird eine benutzerdefinierte Exception ausgelöst
+        }         
     }
 
     private ApiResult filterResult(ApiResult apiResult, double minProbability)

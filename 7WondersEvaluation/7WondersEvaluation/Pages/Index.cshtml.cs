@@ -18,7 +18,7 @@ public class IndexModel : PageModel
     private readonly ILogger<IndexModel> _logger;
 
     public string? ImagePath { get; private set; }
-    public ApiResult? Result { get; private set; }
+    public ApiResult Result { get; private set; }
     public EvaluationData? Evaluation { get; private set; }
 
     public IndexModel(ILogger<IndexModel> logger, CustomVisionClient customVisionClient)
@@ -34,7 +34,7 @@ public class IndexModel : PageModel
     public async Task<IActionResult> OnPostAsync()
     {
         string projectId = "37ee22ef-a721-4c36-b18b-5ee18dc24edf";
-        string publishedName = "Iteration2";
+        string publishedName = "Iteration4";
         var image = Request.Form.Files.GetFile("image");
 
         if (image != null && image.Length > 0)

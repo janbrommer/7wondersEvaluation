@@ -4,3 +4,7 @@
 *.pdb
 
 7WondersEvaluation/7WondersEvaluation/wwwroot/uploads/
+
+7WondersEvaluation/7WondersEvaluation/bin/Debug/net7.0/7WondersEvaluation.exe
+
+7WondersEvaluation/7WondersEvaluation/obj/Debug/net7.0/
