@@ -145,7 +145,11 @@ public class CalcVictoryPoints{
             {
                 stone += 1;
             }
-            else if (prediction.TagName == "green_choice")
+            else if (prediction.TagName == "gild_green_choice")
+            {
+                choice += 1;
+            }
+            else if (prediction.TagName == "expa_green_choice")
             {
                 choice += 1;
             }
@@ -162,6 +166,10 @@ public class CalcVictoryPoints{
     
     private int calcYellow(){
         int yellowCount = 0;
+        if (_result?.Predictions == null)
+        {
+            return yellowCount;
+        }
         foreach (var prediction in _result.Predictions)
         {
             // Check if the tag name exists in the dictionary                    
