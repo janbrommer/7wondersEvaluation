@@ -9,21 +9,21 @@ public class CustomVisionClient
     private readonly HttpClient _httpClient;
     private readonly string _predictionKey;
 
+    string projectId = "37ee22ef-a721-4c36-b18b-5ee18dc24edf";
+    string publishedName = "Iteration6";
+
     public CustomVisionClient(HttpClient httpClient, string predictionKey)
     {
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         _predictionKey = predictionKey ?? throw new ArgumentNullException(nameof(predictionKey));
     }
 
-    public async Task<ApiResult?> PredictImageAsync(
-        string projectId,
-        string publishedName,
+    public async Task<ApiResult?> PredictImageAsync(        
         Stream imageStream,
         int? numTagsPerBoundingBox = 1,
         string? application = null)
     {
-        if (imageStream == null) throw new ArgumentNullException(nameof(imageStream));
-        if (publishedName == null) throw new ArgumentNullException(nameof(publishedName));
+        if (imageStream == null) throw new ArgumentNullException(nameof(imageStream));        
         string your_endpoint = "exercise-jbr2.cognitiveservices.azure.com";        
         // Construct the URL.
         string url = $"https://{your_endpoint}/customvision/v3.1/Prediction/{projectId}/detect/iterations/{publishedName}/image";

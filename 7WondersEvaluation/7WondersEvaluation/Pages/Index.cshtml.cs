@@ -32,9 +32,7 @@ public class IndexModel : PageModel
 
     }
     public async Task<IActionResult> OnPostAsync()
-    {
-        string projectId = "37ee22ef-a721-4c36-b18b-5ee18dc24edf";
-        string publishedName = "Iteration4";
+    {        
         var image = Request.Form.Files.GetFile("image");
 
         if (image != null && image.Length > 0)
@@ -42,11 +40,13 @@ public class IndexModel : PageModel
             var imagePath = Path.Combine("uploads", image.FileName);
             using (var stream = new FileStream(Path.Combine("wwwroot", imagePath), FileMode.Create))
             {
-                await image.CopyToAsync(stream);
+                SaveImagetoBlob saveImagetoBlob = new SaveImagetoBlob();
+                await image.CopyToAsync(stream);                
+                await saveImagetoBlob.UploadAsync(stream,image.FileName);
             }
 
             ImagePath = "/" + imagePath;
-            Result = await _customVisionClient.PredictImageAsync(projectId, publishedName, image.OpenReadStream()) ?? throw new Exception("Failed to get result.");
+            Result = await _customVisionClient.PredictImageAsync(image.OpenReadStream()) ?? throw new Exception("Failed to get result.");
             CalcVictoryPoints calcVictoryPoints = new CalcVictoryPoints(Result);
             Evaluation = calcVictoryPoints.createEvaluationData();
             Console.WriteLine(Result);
