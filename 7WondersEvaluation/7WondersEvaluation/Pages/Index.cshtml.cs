@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks.Dataflow;
+using Microsoft.Extensions.Options;
+using System.Reflection.Metadata;
 
 
 
@@ -17,14 +19,17 @@ public class IndexModel : PageModel
     private readonly CustomVisionClient _customVisionClient;    
     private readonly ILogger<IndexModel> _logger;
 
+    private readonly BlobClient _blobClient;
+
     public string? ImagePath { get; private set; }
     public ApiResult? Result { get; private set; }
     public EvaluationData? Evaluation { get; private set; }
 
-    public IndexModel(ILogger<IndexModel> logger, CustomVisionClient customVisionClient)
+    public IndexModel(ILogger<IndexModel> logger, CustomVisionClient customVisionClient, BlobClient blobClient)
     {
         _logger = logger;
-        _customVisionClient = customVisionClient;
+        _customVisionClient = customVisionClient;        
+        _blobClient = blobClient;
     }
 
     public void OnGet()
@@ -32,27 +37,34 @@ public class IndexModel : PageModel
 
     }
     public async Task<IActionResult> OnPostAsync()
-    {        
-        var image = Request.Form.Files.GetFile("image");
-
-        if (image != null && image.Length > 0)
+    {     
+        try 
         {
-            var imagePath = Path.Combine("uploads", image.FileName);
-            using (var stream = new FileStream(Path.Combine("wwwroot", imagePath), FileMode.Create))
+            var image = Request.Form.Files.GetFile("image");
+
+            if (image != null && image.Length > 0)
             {
-                SaveImagetoBlob saveImagetoBlob = new SaveImagetoBlob();
-                await image.CopyToAsync(stream);                
-                await saveImagetoBlob.UploadAsync(stream,image.FileName);
-            }
+                var imagePath = Path.Combine("uploads", image.FileName);
+                using (var stream = new FileStream(Path.Combine("wwwroot", imagePath), FileMode.Create))
+                {                
+                    await image.CopyToAsync(stream);    
+                    stream.Position =0;
+                    await _blobClient.UploadAsync(stream,image.FileName);
+                }
 
-            ImagePath = "/" + imagePath;
-            Result = await _customVisionClient.PredictImageAsync(image.OpenReadStream()) ?? throw new Exception("Failed to get result.");
-            CalcVictoryPoints calcVictoryPoints = new CalcVictoryPoints(Result);
-            Evaluation = calcVictoryPoints.createEvaluationData();
-            Console.WriteLine(Result);
-        }        
-
+                ImagePath = "/" + imagePath;
+                Result = await _customVisionClient.PredictImageAsync(image.OpenReadStream()) ?? throw new Exception("Failed to get result.");
+                CalcVictoryPoints calcVictoryPoints = new CalcVictoryPoints(Result);
+                Evaluation = calcVictoryPoints.createEvaluationData();
+                Console.WriteLine(Result);
+            }                    
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+        }   
         return Page() ?? throw new Exception("Failed to return page.");
+        
     }
 
 }

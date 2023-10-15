@@ -3,30 +3,35 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 public class CustomVisionClient
 {
-    private readonly HttpClient _httpClient;
-    private readonly string _predictionKey;
+    private readonly HttpClient _httpClient;    
 
-    string projectId = "37ee22ef-a721-4c36-b18b-5ee18dc24edf";
-    string publishedName = "Iteration6";
+    private AzureConfiguration _azureConfig;    
 
-    public CustomVisionClient(HttpClient httpClient, string predictionKey)
+    public CustomVisionClient(HttpClient httpClient, AzureConfiguration azureConfig)
     {
-        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-        _predictionKey = predictionKey ?? throw new ArgumentNullException(nameof(predictionKey));
+        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));    
+        _azureConfig = azureConfig ?? throw new ArgumentNullException(nameof(azureConfig));    
     }
 
     public async Task<ApiResult?> PredictImageAsync(        
         Stream imageStream,
         int? numTagsPerBoundingBox = 1,
         string? application = null)
+    
     {
-        if (imageStream == null) throw new ArgumentNullException(nameof(imageStream));        
-        string your_endpoint = "exercise-jbr2.cognitiveservices.azure.com";        
-        // Construct the URL.
+        string predictionKey = _azureConfig.CustomVision.PredictionKey ?? throw new ArgumentNullException(nameof(_azureConfig.CustomVision.PredictionKey));
+        string your_endpoint = _azureConfig.CustomVision.PredictionUrl ?? throw new ArgumentNullException(nameof(_azureConfig.CustomVision.PredictionUrl));
+        string projectId = _azureConfig.CustomVision.ProkectId ?? throw new ArgumentNullException(nameof(_azureConfig.CustomVision.ProkectId));
+        string publishedName = _azureConfig.CustomVision.IterationName ?? throw new ArgumentNullException(nameof(_azureConfig.CustomVision.IterationName));
         string url = $"https://{your_endpoint}/customvision/v3.1/Prediction/{projectId}/detect/iterations/{publishedName}/image";
+        if (imageStream == null) throw new ArgumentNullException(nameof(imageStream));        
+        
+        // Construct the URL.
+        
         if (numTagsPerBoundingBox.HasValue)
         {
             url += $"?numTagsPerBoundingBox={numTagsPerBoundingBox.Value}";
@@ -39,7 +44,7 @@ public class CustomVisionClient
         // Prepare the HTTP request.
         using var content = new StreamContent(imageStream);
         content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-        _httpClient.DefaultRequestHeaders.Add("Prediction-key", _predictionKey);
+        _httpClient.DefaultRequestHeaders.Add("Prediction-key", predictionKey);
         
         // Send the HTTP request and get the response.
         using var response = await _httpClient.PostAsync(url, content);
