@@ -9,12 +9,12 @@ public class CustomVisionClient
 {
     private readonly HttpClient _httpClient;    
 
-    private AzureConfiguration _azureConfig;    
+    private readonly AzureConfiguration _azureConfig;    
 
-    public CustomVisionClient(HttpClient httpClient, AzureConfiguration azureConfig)
+    public CustomVisionClient(HttpClient httpClient, IOptions<AzureConfiguration> azureConfig)
     {
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));    
-        _azureConfig = azureConfig ?? throw new ArgumentNullException(nameof(azureConfig));    
+        _azureConfig = azureConfig.Value;    
     }
 
     public async Task<ApiResult?> PredictImageAsync(        

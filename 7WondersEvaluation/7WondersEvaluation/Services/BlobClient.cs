@@ -8,12 +8,12 @@ public class BlobClient{// Azure Storage-Konto-Verbindungszeichenfolge
         
     BlobContainerClient _containerClient;
 
-    AzureConfiguration _azureConfig;
+    private readonly AzureConfiguration _azureConfig;
 
 
-    public BlobClient(AzureConfiguration azureOptions)
+    public BlobClient(IOptions<AzureConfiguration> azureOptions)
     {
-        _azureConfig = azureOptions ?? throw new ArgumentNullException(nameof(azureOptions));
+        _azureConfig = azureOptions.Value;
         // Create a BlobServiceClient using the connection string    
         BlobServiceClient blobServiceClient = new BlobServiceClient(new Uri(_azureConfig.BlobStorage.ConnectionString));
         // Get a reference to the container
