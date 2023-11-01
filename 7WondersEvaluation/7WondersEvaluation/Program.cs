@@ -1,16 +1,20 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-//builder.Configuration.AddJsonFile("appsettings.json", optional: false);
 var configuration = builder.Configuration;
 builder.Services.Configure<AzureConfiguration>(configuration.GetSection("Azure"));
-//var azureConfig = configuration.GetSection("Azure").Get<AzureConfiguration>();
 
 // Add services to the container.
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<CustomVisionClient>();
 builder.Services.AddSingleton<BlobClient>();
+
+// Add database
+var connectionString = configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<GameContext>(options =>
+    options.UseSqlite(connectionString)
+);
+
 builder.Services.AddRazorPages();
 
 var app = builder.Build();

@@ -9,12 +9,23 @@ public class GameContext : DbContext
 
     public DbSet<Game> Games { get; set; }
     public DbSet<Player> Players { get; set; }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<PlayerGame>()
+        .HasKey(pg => new { pg.PlayerId, pg.GameId });
 }
+
+}
+
 
 public class Game
 {
     public int GameId { get; set; }
     public string GameName { get; set; }
+
+    public DateTime GameDate { get; set; }
+
+    public bool IsFinished { get; set; }
 
     public List<PlayerGame> PlayersInGame { get; set; }
 }
