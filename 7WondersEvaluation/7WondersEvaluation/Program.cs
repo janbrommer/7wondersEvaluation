@@ -1,20 +1,16 @@
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddJsonFile("appsettings.json", optional: false);
+//builder.Configuration.AddJsonFile("appsettings.json", optional: false);
 var configuration = builder.Configuration;
-var azureConfig = configuration.GetSection("Azure").Get<AzureConfiguration>();
+builder.Services.Configure<AzureConfiguration>(configuration.GetSection("Azure"));
+//var azureConfig = configuration.GetSection("Azure").Get<AzureConfiguration>();
 
 // Add services to the container.
-builder.Services.AddSingleton(client =>
-{
-    HttpClient httpClient = new HttpClient();    
-    return new CustomVisionClient(httpClient, azureConfig ?? throw new ArgumentNullException(nameof(azureConfig)));    
-});
-builder.Services.AddSingleton(client =>
-{
-    return new BlobClient(azureConfig ?? throw new ArgumentNullException(nameof(azureConfig)));
-});
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<CustomVisionClient>();
+builder.Services.AddSingleton<BlobClient>();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
