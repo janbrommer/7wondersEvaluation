@@ -48,4 +48,6 @@ public class PlayerGame
 
     public int GameId { get; set; }
     public Game Game { get; set; }
+
+    public int PositionInGame { get; set; }
 }
