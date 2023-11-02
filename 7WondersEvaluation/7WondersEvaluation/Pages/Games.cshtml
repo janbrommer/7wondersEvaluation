@@ -1,0 +1,15 @@
+@page
+@model OpenGamesModel
+
+@inject GameContext _context
+
+<h1>Offene Spiele</h1>
+
+<ul>
+    @foreach (var game in Model.OpenGames)
+    {
+        <li>@game.GameName <a asp-page="JoinGame" asp-route-gameId="@game.GameId">Beitreten</a></li>
+    }
+</ul>
+
+<p><a asp-page="CreateGame">Neues Spiel erstellen</a></p>

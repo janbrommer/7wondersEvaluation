@@ -1,0 +1,16 @@
+@page
+@model CreateGameModel
+
+<h1>Create a New Game</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="NewGame.GameName"></label>
+        <input asp-for="NewGame.GameName" class="form-control" />
+        <span asp-validation-for="NewGame.GameName" class="text-danger"></span>
+    </div>
+
+    <!-- Add other game properties as needed -->
+
+    <button type="submit" class="btn btn-primary">Create Game</button>
+</form>

@@ -8,7 +8,10 @@ public class GameContext : DbContext
     }
 
     public DbSet<Game> Games { get; set; }
-    public DbSet<Player> Players { get; set; }
+    public DbSet<Player> Players { get; set; }    
+
+    public DbSet<PlayerGame> PlayerGames { get; set; }    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
 {
     modelBuilder.Entity<PlayerGame>()
@@ -21,21 +24,21 @@ public class GameContext : DbContext
 public class Game
 {
     public int GameId { get; set; }
-    public string GameName { get; set; }
+    public required string GameName { get; set; }
 
     public DateTime GameDate { get; set; }
 
     public bool IsFinished { get; set; }
 
-    public List<PlayerGame> PlayersInGame { get; set; }
+    public List<PlayerGame>? PlayersInGame { get; set; }
 }
 
 public class Player
 {
     public int PlayerId { get; set; }
-    public string PlayerName { get; set; }
+    public required string PlayerName { get; set; }
 
-    public List<PlayerGame> GamesPlayed { get; set; }
+    public List<PlayerGame>? GamesPlayed { get; set; }
 }
 
 public class PlayerGame
