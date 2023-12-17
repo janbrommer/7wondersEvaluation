@@ -16,3 +16,5 @@
 7WondersEvaluation/7WondersEvaluation/obj/
 
 *.db
+7WondersEvaluation/7WondersEvaluation/7wonders.db-wal
+7WondersEvaluation/7WondersEvaluation/7wonders.db-shm

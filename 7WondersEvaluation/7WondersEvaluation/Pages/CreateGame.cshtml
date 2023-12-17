@@ -1,5 +1,8 @@
 @page
 @model CreateGameModel
+@{
+    ViewData["Title"] = "Create Game";
+}
 
 <h1>Create a New Game</h1>
 
@@ -10,7 +13,56 @@
         <span asp-validation-for="NewGame.GameName" class="text-danger"></span>
     </div>
 
-    <!-- Add other game properties as needed -->
+    <div class="form-group">
+        <label asp-for="NewGame.GameDate"></label>
+        <input asp-for="NewGame.GameDate" type="datetime-local" class="form-control" />
+        <span asp-validation-for="NewGame.GameDate" class="text-danger"></span>
+    </div>
+
+    <h2>Players</h2>
+    <table class="table" id="playersTable">
+        <thead>
+            <tr>
+                <th>Player Name</th>
+                <th>Position In Game</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.PlayerCount; i++)
+            {
+                <tr>
+                    <td>
+                        <input asp-for="Players[i].PlayerName" class="form-control" />
+                        <span asp-validation-for="Players[i].PlayerName" class="text-danger"></span>
+                    </td>                    
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-secondary" id="addPlayer">Add Player</button>
 
     <button type="submit" class="btn btn-primary">Create Game</button>
 </form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialize player count
+            var playerCount = @Model.PlayerCount;
+
+            // Add new player row when the "Add Player" button is clicked
+            $("#addPlayer").click(function () {
+                if (playerCount < 7) {
+                    var newRow = $("<tr>");
+                    var nameCell = $("<td>").append("<input class='form-control' name='NewGame.PlayersInGame[" + playerCount + "].PlayerName' />");
+                    var positionCell = $("<td>").append("<input class='form-control' name='NewGame.PlayersInGame[" + playerCount + "].PositionInGame' type='number' />");
+                    newRow.append(nameCell);
+                    newRow.append(positionCell);
+                    $("#playersTable tbody").append(newRow);
+                    playerCount++;
+                }
+            });
+        });
+    </script>
+}

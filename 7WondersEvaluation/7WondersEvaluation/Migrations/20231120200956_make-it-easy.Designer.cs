@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _7WondersEvaluation.Migrations
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20231120200956_make-it-easy")]
+    partial class makeiteasy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
@@ -35,6 +38,21 @@ namespace _7WondersEvaluation.Migrations
                     b.HasKey("GameId");
 
                     b.ToTable("Games");
+                });
+
+            modelBuilder.Entity("GamePlayer", b =>
+                {
+                    b.Property<int>("GamesGameId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PlayersPlayerId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("GamesGameId", "PlayersPlayerId");
+
+                    b.HasIndex("PlayersPlayerId");
+
+                    b.ToTable("GamePlayer");
                 });
 
             modelBuilder.Entity("Player", b =>
@@ -70,23 +88,34 @@ namespace _7WondersEvaluation.Migrations
                     b.ToTable("PlayersInGame");
                 });
 
+            modelBuilder.Entity("GamePlayer", b =>
+                {
+                    b.HasOne("Game", null)
+                        .WithMany()
+                        .HasForeignKey("GamesGameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Player", null)
+                        .WithMany()
+                        .HasForeignKey("PlayersPlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("PlayersInGame", b =>
                 {
-                    b.HasOne("Game", "Game")
+                    b.HasOne("Game", null)
                         .WithMany("PlayersInGame")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Player", "Player")
+                    b.HasOne("Player", null)
                         .WithMany("PlayersInGame")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Game");
-
-                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("Game", b =>

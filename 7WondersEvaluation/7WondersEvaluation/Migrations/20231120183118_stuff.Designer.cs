@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _7WondersEvaluation.Migrations
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20231120183118_stuff")]
+    partial class stuff
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
@@ -52,25 +55,25 @@ namespace _7WondersEvaluation.Migrations
                     b.ToTable("Players");
                 });
 
-            modelBuilder.Entity("PlayersInGame", b =>
+            modelBuilder.Entity("PlayerGame", b =>
                 {
-                    b.Property<int>("GameId")
+                    b.Property<int>("PlayerId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("PlayerId")
+                    b.Property<int>("GameId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("PositionInGame")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("GameId", "PlayerId");
+                    b.HasKey("PlayerId", "GameId");
 
-                    b.HasIndex("PlayerId");
+                    b.HasIndex("GameId");
 
-                    b.ToTable("PlayersInGame");
+                    b.ToTable("PlayerGames");
                 });
 
-            modelBuilder.Entity("PlayersInGame", b =>
+            modelBuilder.Entity("PlayerGame", b =>
                 {
                     b.HasOne("Game", "Game")
                         .WithMany("PlayersInGame")
@@ -79,7 +82,7 @@ namespace _7WondersEvaluation.Migrations
                         .IsRequired();
 
                     b.HasOne("Player", "Player")
-                        .WithMany("PlayersInGame")
+                        .WithMany("GamesPlayed")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -96,7 +99,7 @@ namespace _7WondersEvaluation.Migrations
 
             modelBuilder.Entity("Player", b =>
                 {
-                    b.Navigation("PlayersInGame");
+                    b.Navigation("GamesPlayed");
                 });
 #pragma warning restore 612, 618
         }
