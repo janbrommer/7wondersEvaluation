@@ -1,0 +1,121 @@
+﻿@page
+@model EvaluateModel
+@{
+    ViewData["Title"] = "7 Wonders Evaluation";
+}
+@inject GameContext _context
+
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*" />
+    <button type="submit">Upload</button>
+</form>
+
+@if (Model.ImagePath != null)
+{
+    <div id="imageContainer" style="position: relative;">
+        <img src="@Model.ImagePath" alt="Uploaded Image"  width="400" height="300" id="predictedImage" style="position: relative;"  />
+        <canvas id="canvas"></canvas>
+    </div>
+}
+
+@if (Model.Evaluation != null)
+{
+    <div id="tableContainer" style="margin-top: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Attribute</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Name</td>
+                    <td>@Model.Evaluation.Name</td>
+                </tr>
+                <tr>
+                    <td>Red</td>
+                    <td>@Model.Evaluation.Red</td>
+                </tr>
+                <tr>
+                    <td>Coins</td>
+                    <td>@Model.Evaluation.Coins</td>
+                </tr>
+                <tr>
+                    <td>Expansion Stages</td>
+                    <td>@Model.Evaluation.ExpansionStages</td>
+                </tr>
+                <tr>
+                    <td>Blue</td>
+                    <td>@Model.Evaluation.Blue</td>
+                </tr>
+                <tr>
+                    <td>Yellow</td>
+                    <td>@Model.Evaluation.Yellow</td>
+                </tr>
+                <tr>
+                    <td>Violet</td>
+                    <td>@Model.Evaluation.Violet</td>
+                </tr>
+                <tr>
+                    <td>Green</td>
+                    <td>@Model.Evaluation.Green</td>
+                </tr>
+                <tr>
+                    <td>Sum</td>
+                    <td>@Model.Evaluation.Sum</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
+
+@if (Model.Result != null)
+{
+    @section Scripts {
+    <script>        
+        console.log("Result: @Model.Result");
+        var predictions = @Json.Serialize(Model.Result.Predictions);  // Assuming Predictions are in your Razor model
+        var imageElement = document.getElementById('predictedImage');
+        var canvas = document.getElementById('canvas');
+
+        if (imageElement != null && canvas != null) {
+            var imageStyle = getComputedStyle(imageElement);
+
+            // Get the image's position
+            var imageTop = parseFloat(imageStyle.top);
+            var imageLeft = parseFloat(imageStyle.left);
+            canvas.style.position = 'absolute';
+            canvas.style.top = imageTop + 'px';
+            canvas.style.left = imageLeft + 'px';
+            canvas.width = imageElement.width;
+            canvas.height = imageElement.height;
+            canvas.style.zIndex = '1';
+
+            var ctx = canvas.getContext('2d');
+
+            predictions.forEach(function(prediction) {
+                var boundingBox = prediction.boundingBox;
+                
+                // Coordinates are typically normalized, so multiply by image size
+                var left = boundingBox.left * imageElement.width;
+                var top = boundingBox.top * imageElement.height;
+                var width = boundingBox.width * imageElement.width;
+                var height = boundingBox.height * imageElement.height;
+
+                // Draw bounding box
+                ctx.beginPath();
+                ctx.rect(left, top, width, height);
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = 'red';  // Box color
+                ctx.stroke();
+
+                // Draw label
+                ctx.font = '16px Arial';
+                ctx.fillStyle = 'red';
+                ctx.fillText(prediction.tagName, left, top - 10);
+            });
+        }
+    </script>
+    }
+}

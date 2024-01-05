@@ -24,7 +24,6 @@
         <thead>
             <tr>
                 <th>Player Name</th>
-                <th>Position In Game</th>
             </tr>
         </thead>
         <tbody>
@@ -56,9 +55,7 @@
                 if (playerCount < 7) {
                     var newRow = $("<tr>");
                     var nameCell = $("<td>").append("<input class='form-control' name='NewGame.PlayersInGame[" + playerCount + "].PlayerName' />");
-                    var positionCell = $("<td>").append("<input class='form-control' name='NewGame.PlayersInGame[" + playerCount + "].PositionInGame' type='number' />");
                     newRow.append(nameCell);
-                    newRow.append(positionCell);
                     $("#playersTable tbody").append(newRow);
                     playerCount++;
                 }

@@ -1,0 +1,14 @@
+@page
+@model JoinGameModel
+
+@inject GameContext _context
+
+<h1>Join Game</h1>
+
+<ul>
+    @foreach (var playerInGame in Model.game.PlayersInGame)
+    {
+        <li>@playerInGame.Player.PlayerName <a asp-page="Evaluate" asp-route-gameId="@playerInGame.GameId" asp-route-playerId="@playerInGame.PlayerId">Evaluate</a></li>
+    }
+</ul>
+

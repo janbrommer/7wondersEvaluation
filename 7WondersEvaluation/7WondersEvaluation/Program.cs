@@ -12,7 +12,7 @@ builder.Services.AddSingleton<BlobClient>();
 // Add database
 var connectionString = configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<GameContext>(options =>
-    options.UseSqlite(connectionString)
+    options.UseSqlite(connectionString).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
 );
 
 builder.Services.AddRazorPages();
