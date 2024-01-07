@@ -24,8 +24,17 @@ public class GameContext : DbContext
         builder.Entity<PlayersInGame>()
             .HasKey(pg => new { pg.GameId, pg.PlayerId });
 
-        builder.Entity<Evaluation>().HasKey(eva => new {eva.GameId, eva.PlayerId});
-        builder.Entity<PlayerOutlay>().HasKey(plou => new {plou.GameId, plou.PlayerId});
+        builder.Entity<PlayersInGame>()
+            .HasOne(pig => pig.Evaluation)
+            .WithOne(e => e.PlayersInGame)
+            .HasForeignKey<Evaluation>(e => new { e.GameId, e.PlayerId })
+            .IsRequired(false);
+
+        builder.Entity<PlayersInGame>()
+            .HasOne(pig => pig.PlayerOutlay)
+            .WithOne(po => po.PlayersInGame)
+            .HasForeignKey<PlayerOutlay>(po => new { po.GameId, po.PlayerId })
+            .IsRequired(false);
     }
 
 }
@@ -65,9 +74,9 @@ public class Player
 public class PlayersInGame 
 {
     public int GameId { get; set; }
+    public int PlayerId {get; set;}
 
     public virtual Game Game  {get; set; }
-    public int PlayerId {get; set;}
     public virtual Player Player  {get; set; }
 
     public int PositionInGame {get; set;}   
@@ -79,8 +88,12 @@ public class PlayersInGame
 public class PlayerOutlay
 {
     
-    public int GameId  { get; set; }
-    public int PlayerId  { get; set; }    
+    public int PlayerOutlayId { get; set; }
+
+    public int GameId { get; set; }
+
+    public int PlayerId { get; set; }
+    public virtual PlayersInGame PlayersInGame {get; set;}
     public int CountRed { get; set; }
     public int CountGreen { get; set; }
     public int CountYellow { get; set; }
@@ -94,8 +107,10 @@ public class PlayerOutlay
 
 public class Evaluation
 {
-    public int GameId  { get; set; }
-    public int PlayerId  { get; set; }    
+    public int EvaluationId { get; set; } 
+    public int GameId { get; set; }
+    public int PlayerId { get; set; }
+    public virtual PlayersInGame PlayersInGame {get; set;}
     public int Red { get; set; } = 0;
     public int Coins { get; set; } = 0;
     public int ExpansionStages { get; set; } = 0;

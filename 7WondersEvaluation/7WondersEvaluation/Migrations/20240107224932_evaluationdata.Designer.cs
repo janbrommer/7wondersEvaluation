@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _7WondersEvaluation.Migrations
 {
     [DbContext(typeof(GameContext))]
-    [Migration("20240107193750_evaluationdata")]
+    [Migration("20240107224932_evaluationdata")]
     partial class evaluationdata
     {
         /// <inheritdoc />
@@ -21,10 +21,8 @@ namespace _7WondersEvaluation.Migrations
 
             modelBuilder.Entity("Evaluation", b =>
                 {
-                    b.Property<int>("GameId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("PlayerId")
+                    b.Property<int>("EvaluationId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Blue")
@@ -36,7 +34,13 @@ namespace _7WondersEvaluation.Migrations
                     b.Property<int>("ExpansionStages")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("GameId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Green")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PlayerId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Red")
@@ -48,7 +52,10 @@ namespace _7WondersEvaluation.Migrations
                     b.Property<int>("Yellow")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("GameId", "PlayerId");
+                    b.HasKey("EvaluationId");
+
+                    b.HasIndex("GameId", "PlayerId")
+                        .IsUnique();
 
                     b.ToTable("Evaluation");
                 });
@@ -91,10 +98,8 @@ namespace _7WondersEvaluation.Migrations
 
             modelBuilder.Entity("PlayerOutlay", b =>
                 {
-                    b.Property<int>("GameId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("PlayerId")
+                    b.Property<int>("PlayerOutlayId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("CountBrown")
@@ -124,7 +129,16 @@ namespace _7WondersEvaluation.Migrations
                     b.Property<int>("CountYellow")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("GameId", "PlayerId");
+                    b.Property<int>("GameId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("PlayerOutlayId");
+
+                    b.HasIndex("GameId", "PlayerId")
+                        .IsUnique();
 
                     b.ToTable("PlayerOutlay");
                 });
@@ -137,18 +151,6 @@ namespace _7WondersEvaluation.Migrations
                     b.Property<int>("PlayerId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("EvaluationGameId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("EvaluationPlayerId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("PlayerOutlayGameId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("PlayerOutlayPlayerId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("PositionInGame")
                         .HasColumnType("INTEGER");
 
@@ -156,11 +158,25 @@ namespace _7WondersEvaluation.Migrations
 
                     b.HasIndex("PlayerId");
 
-                    b.HasIndex("EvaluationGameId", "EvaluationPlayerId");
-
-                    b.HasIndex("PlayerOutlayGameId", "PlayerOutlayPlayerId");
-
                     b.ToTable("PlayersInGame");
+                });
+
+            modelBuilder.Entity("Evaluation", b =>
+                {
+                    b.HasOne("PlayersInGame", "PlayersInGame")
+                        .WithOne("Evaluation")
+                        .HasForeignKey("Evaluation", "GameId", "PlayerId");
+
+                    b.Navigation("PlayersInGame");
+                });
+
+            modelBuilder.Entity("PlayerOutlay", b =>
+                {
+                    b.HasOne("PlayersInGame", "PlayersInGame")
+                        .WithOne("PlayerOutlay")
+                        .HasForeignKey("PlayerOutlay", "GameId", "PlayerId");
+
+                    b.Navigation("PlayersInGame");
                 });
 
             modelBuilder.Entity("PlayersInGame", b =>
@@ -177,21 +193,9 @@ namespace _7WondersEvaluation.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Evaluation", "Evaluation")
-                        .WithMany()
-                        .HasForeignKey("EvaluationGameId", "EvaluationPlayerId");
-
-                    b.HasOne("PlayerOutlay", "PlayerOutlay")
-                        .WithMany()
-                        .HasForeignKey("PlayerOutlayGameId", "PlayerOutlayPlayerId");
-
-                    b.Navigation("Evaluation");
-
                     b.Navigation("Game");
 
                     b.Navigation("Player");
-
-                    b.Navigation("PlayerOutlay");
                 });
 
             modelBuilder.Entity("Game", b =>
@@ -202,6 +206,13 @@ namespace _7WondersEvaluation.Migrations
             modelBuilder.Entity("Player", b =>
                 {
                     b.Navigation("PlayersInGame");
+                });
+
+            modelBuilder.Entity("PlayersInGame", b =>
+                {
+                    b.Navigation("Evaluation");
+
+                    b.Navigation("PlayerOutlay");
                 });
 #pragma warning restore 612, 618
         }

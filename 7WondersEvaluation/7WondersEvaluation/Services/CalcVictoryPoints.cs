@@ -9,8 +9,6 @@ public class CalcVictoryPoints{
     public PlayerOutlay createPlayerOutlay(PlayersInGame playersInGame){
         PlayerOutlay outlay = new PlayerOutlay
         {
-            PlayerId = playersInGame.PlayerId,
-            GameId = playersInGame.GameId,
             CountRed = count("red"),
             CountBrown = count("brown"),
             CountExpa = count("expa"),
@@ -29,8 +27,6 @@ public class CalcVictoryPoints{
     {
         Evaluation evaluationData = new Evaluation
         {
-            PlayerId = playersInGame.PlayerId,
-            GameId = playersInGame.GameId,
             Red = calcRed(),
             Coins = calcCoin(),
             ExpansionStages = calcExpa(),
