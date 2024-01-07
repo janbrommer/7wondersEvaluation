@@ -5,7 +5,7 @@
 }
 @inject GameContext _context
 
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" asp-route-gameId="@Model.playersInGame.GameId" asp-route-playerId="@Model.playersInGame.PlayerId">
     <input type="file" name="image" accept="image/*" />
     <button type="submit">Upload</button>
 </form>
@@ -29,10 +29,6 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Name</td>
-                    <td>@Model.Evaluation.Name</td>
-                </tr>
                 <tr>
                     <td>Red</td>
                     <td>@Model.Evaluation.Red</td>

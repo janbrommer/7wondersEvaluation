@@ -6,11 +6,31 @@ public class CalcVictoryPoints{
         _result = result;        
     }
 
-    public EvaluationData createEvaluationData()
-    {
-        EvaluationData evaluationData = new EvaluationData
+    public PlayerOutlay createPlayerOutlay(PlayersInGame playersInGame){
+        PlayerOutlay outlay = new PlayerOutlay
         {
-            Name = "Test",
+            PlayerId = playersInGame.PlayerId,
+            GameId = playersInGame.GameId,
+            CountRed = count("red"),
+            CountBrown = count("brown"),
+            CountExpa = count("expa"),
+            CountGild = count("gild"),
+            CountGreen = count("green"),
+            CountGrey = count("grey"),
+            CountNegWarMarker = count("war_neg"),
+            CountWarMarker = count("war") - count("war_neg"),
+            CountYellow = count("yellow")
+            
+        };
+        return outlay;
+    }
+
+    public Evaluation createEvaluationData(PlayersInGame playersInGame)
+    {
+        Evaluation evaluationData = new Evaluation
+        {
+            PlayerId = playersInGame.PlayerId,
+            GameId = playersInGame.GameId,
             Red = calcRed(),
             Coins = calcCoin(),
             ExpansionStages = calcExpa(),
@@ -19,7 +39,6 @@ public class CalcVictoryPoints{
             Violet = 0,
             Green = calcGreen()
         };
-        evaluationData.Sum = evaluationData.Red + evaluationData.Coins + evaluationData.ExpansionStages + evaluationData.Blue + evaluationData.Yellow + evaluationData.Violet + evaluationData.Green;
         return evaluationData;
     }
 
