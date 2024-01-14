@@ -46,7 +46,8 @@ public class EvaluateModel : PageModel
     {     
         try 
         {
-            playersInGame = _context.PlayersInGame.Where(pg => pg.GameId == gameId && pg.PlayerId == playerId).Include(pg => pg.Evaluation).Include(pg => pg.PlayerOutlay).FirstOrDefault();
+            playersInGame = _context.PlayersInGame.Where(pg => pg.GameId == gameId && pg.PlayerId == playerId).Include(pg => pg.Evaluation).Include(pg => pg.PlayerOutlay).AsTracking().FirstOrDefault();
+            
             var image = Request.Form.Files.GetFile("image");
 
             if (image != null && image.Length > 0)
@@ -62,11 +63,9 @@ public class EvaluateModel : PageModel
                 ImagePath = "/" + imagePath;
                 Result = await _customVisionClient.PredictImageAsync(image.OpenReadStream()) ?? throw new Exception("Failed to get result.");
                 CalcVictoryPoints calcVictoryPoints = new CalcVictoryPoints(Result);
-                _context.Add(calcVictoryPoints.createEvaluationData(playersInGame));
-                _context.Add(calcVictoryPoints.createPlayerOutlay(playersInGame));
-                //playersInGame.Evaluation = calcVictoryPoints.createEvaluationData(playersInGame);
-                //playersInGame.PlayerOutlay = calcVictoryPoints.createPlayerOutlay(playersInGame);
-                Console.WriteLine(Result);
+                playersInGame.Evaluation = calcVictoryPoints.createEvaluationData(playersInGame);
+                playersInGame.PlayerOutlay = calcVictoryPoints.createPlayerOutlay(playersInGame);
+                //Console.WriteLine(Result);
                 Console.WriteLine(_context.ChangeTracker.DebugView.ShortView);
                 _context.SaveChanges();
             }                    

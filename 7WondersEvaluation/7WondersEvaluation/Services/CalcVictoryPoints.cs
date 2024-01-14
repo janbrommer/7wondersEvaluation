@@ -17,7 +17,8 @@ public class CalcVictoryPoints{
             CountGrey = count("grey"),
             CountNegWarMarker = count("war_neg"),
             CountWarMarker = count("war") - count("war_neg"),
-            CountYellow = count("yellow")
+            CountYellow = count("yellow"),
+            PlayersInGame = playersInGame
             
         };
         return outlay;
@@ -33,7 +34,9 @@ public class CalcVictoryPoints{
             Blue = calcBlue(),
             Yellow = calcYellow(),
             Violet = 0,
-            Green = calcGreen()
+            Green = calcGreen(),
+            PlayersInGame = playersInGame
+            
         };
         return evaluationData;
     }
