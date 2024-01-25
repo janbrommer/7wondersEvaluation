@@ -1,3 +1,4 @@
+using _7WondersEvaluation.Pages;
 using Microsoft.EntityFrameworkCore;
 
 public class GameContext : DbContext
@@ -28,13 +29,21 @@ public class GameContext : DbContext
             .HasOne(pig => pig.Evaluation)
             .WithOne(e => e.PlayersInGame)
             .HasForeignKey<Evaluation>(e => new { e.GameId, e.PlayerId })
-            .IsRequired(false);
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<PlayersInGame>()
             .HasOne(pig => pig.PlayerOutlay)
             .WithOne(po => po.PlayersInGame)
             .HasForeignKey<PlayerOutlay>(po => new { po.GameId, po.PlayerId })
-            .IsRequired(false);
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<PlayerOutlay>()
+            .Property(e => e.Gilds)
+            .HasConversion(
+                v => string.Join(',', v),
+                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
     }
 
 }
@@ -61,6 +70,32 @@ public class Game
         PlayersInGame.Add(new PlayersInGame{ Game = this, Player = player, PositionInGame = positionInGame});        
     }
 
+    public bool IsEvaluated(){        
+        foreach (var player in this.PlayersInGame){            
+            if (player.Evaluation == null)
+            {                
+                return false;
+            }            
+        }    
+        return true;    
+    }
+    
+    public int GetPositionLeft(int positionInGame){
+        if(positionInGame == 0){
+            return PlayersInGame.Count()-1;
+        }else{
+            return positionInGame -1;
+        }        
+    }  
+
+    public int GetPositionRight(int positionInGame){
+         if(positionInGame == (PlayersInGame.Count() -1)){
+            return 0;
+        }else{
+            return positionInGame + 1;
+        }
+    }
+
 }
 
 public class Player
@@ -82,7 +117,7 @@ public class PlayersInGame
     public int PositionInGame {get; set;}   
 
     public virtual PlayerOutlay? PlayerOutlay {get; set;}
-    public virtual Evaluation? Evaluation {get; set;}
+    public virtual Evaluation? Evaluation {get; set;}  
 }
 
 public class PlayerOutlay
@@ -94,6 +129,7 @@ public class PlayerOutlay
 
     public int PlayerId { get; set; }
     public virtual PlayersInGame PlayersInGame {get; set;}
+    public int CountBlue { get; set; }
     public int CountRed { get; set; }
     public int CountGreen { get; set; }
     public int CountYellow { get; set; }
@@ -102,7 +138,9 @@ public class PlayerOutlay
     public int CountGild { get; set; }
     public int CountExpa { get; set; }
     public int CountWarMarker { get; set; }
-    public int CountNegWarMarker { get; set; }
+    public int CountNegWarMarker { get; set; }    
+    public string[] Gilds { get; set; }
+           
 }
 
 public class Evaluation

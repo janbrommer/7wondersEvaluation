@@ -67,7 +67,7 @@ public class EvaluateModel : PageModel
                 playersInGame.PlayerOutlay = calcVictoryPoints.createPlayerOutlay(playersInGame);
                 //Console.WriteLine(Result);
                 Console.WriteLine(_context.ChangeTracker.DebugView.ShortView);
-                _context.SaveChanges();
+                _context.SaveChanges();                
             }                    
         }
         catch (Exception ex)

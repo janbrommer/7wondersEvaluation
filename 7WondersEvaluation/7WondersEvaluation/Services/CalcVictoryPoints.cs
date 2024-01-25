@@ -1,3 +1,5 @@
+using System.Threading.Tasks.Dataflow;
+
 public class CalcVictoryPoints{
     private ApiResult _result;
     public CalcVictoryPoints(ApiResult result)
@@ -6,9 +8,15 @@ public class CalcVictoryPoints{
         _result = result;        
     }
 
+    public CalcVictoryPoints()
+    {
+        _result = new ApiResult();            
+    }
+
     public PlayerOutlay createPlayerOutlay(PlayersInGame playersInGame){
         PlayerOutlay outlay = new PlayerOutlay
         {
+            CountBlue = count("blue"),
             CountRed = count("red"),
             CountBrown = count("brown"),
             CountExpa = count("expa"),
@@ -18,7 +26,8 @@ public class CalcVictoryPoints{
             CountNegWarMarker = count("war_neg"),
             CountWarMarker = count("war") - count("war_neg"),
             CountYellow = count("yellow"),
-            PlayersInGame = playersInGame
+            PlayersInGame = playersInGame,
+            Gilds = getGild()
             
         };
         return outlay;
@@ -181,6 +190,63 @@ public class CalcVictoryPoints{
         int Sum = max(getGreemValue(circle + choice, gear, stone),getGreemValue(circle, gear + choice, stone), getGreemValue(circle, gear, stone + choice));
         return Sum;
     }
+
+    public int calcViolet(PlayersInGame pig, PlayersInGame pigLeft, PlayersInGame pigRight){
+        int sumViolet = 0;
+        foreach (string gild in pig.PlayerOutlay.Gilds){
+            switch (gild)
+            {
+                case "gild_blue":                    
+                    sumViolet+= pigLeft.PlayerOutlay.CountBlue;
+                    sumViolet+= pigRight.PlayerOutlay.CountBlue;
+                    break;
+
+                case "gild_brown":                    
+                    sumViolet+= pigLeft.PlayerOutlay.CountBrown;
+                    sumViolet+= pigRight.PlayerOutlay.CountBrown;
+                    break;
+
+                case "gild_expa":
+                    sumViolet+= pigLeft.PlayerOutlay.CountExpa;
+                    sumViolet+= pigRight.PlayerOutlay.CountExpa;
+                    sumViolet+= pig.PlayerOutlay.CountExpa;                    
+                    break;
+                case "gild_expa_self":
+                    //TODO: Check if all expas are build
+                    sumViolet+= 7;                    
+                    break;
+                case "gild_green":
+                    sumViolet+= pigLeft.PlayerOutlay.CountGreen;
+                    sumViolet+=  pigRight.PlayerOutlay.CountGreen;                    
+                    break;
+                case "gild_grey":
+                    sumViolet+= pigLeft.PlayerOutlay.CountGrey *2;
+                    sumViolet+= pigRight.PlayerOutlay.CountGrey *2;                    
+                    break;
+                case "gild_mix":
+                    sumViolet+= pig.PlayerOutlay.CountGrey;
+                    sumViolet+= pig.PlayerOutlay.CountBrown;
+                    sumViolet+= pig.PlayerOutlay.CountGild;                
+                    break;
+                case "gild_red":                    
+                    sumViolet+= pigLeft.PlayerOutlay.CountRed;
+                    sumViolet+=  pigRight.PlayerOutlay.CountRed;
+                    break;
+                case "gild_war_neg":
+                    sumViolet+= pigLeft.PlayerOutlay.CountNegWarMarker;
+                    sumViolet+=  pigRight.PlayerOutlay.CountNegWarMarker;
+                    break;
+                case "gild_yellow":
+                    sumViolet+= pigLeft.PlayerOutlay.CountYellow;
+                    sumViolet+=  pigRight.PlayerOutlay.CountYellow;
+                    break;                
+                default:                    
+                    Console.WriteLine("Gild" + gild + "is unknown or will be handelt at an other place");
+                    break;
+            }
+        }
+        return sumViolet;
+    }
     
     private int calcYellow(){
         int yellowCount = 0;
@@ -221,6 +287,23 @@ public class CalcVictoryPoints{
             }
         }
         return count;
+    }
+
+    private string[] getGild(){
+        string[] result = new string[12];
+        if (_result?.Predictions != null)        
+        {       
+            
+            foreach (var prediction in _result.Predictions)
+            {
+                // Check if the tag name exists in the dictionary                    
+                if (prediction.TagName.StartsWith("gild"))
+                {
+                    result.Append(prediction.TagName);
+                }
+            }
+        }
+        return result;
     }
 
     private int getGreemValue(int circle, int gear, int stone){
