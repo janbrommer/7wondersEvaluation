@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\bigfo\\Documents\\7WondersApp\\7wondersEvaluation\\7WondersEvaluation\\7WondersEvaluation\\7WondersEvaluation.csproj": {}
+    "C:\\Users\\bigfo\\Documents\\7WondersApp\\7wondersEvaluation\\7WondersEvaluation\\7WondersEvaluation.csproj": {}
   },
   "projects": {
-    "C:\\Users\\bigfo\\Documents\\7WondersApp\\7wondersEvaluation\\7WondersEvaluation\\7WondersEvaluation\\7WondersEvaluation.csproj": {
+    "C:\\Users\\bigfo\\Documents\\7WondersApp\\7wondersEvaluation\\7WondersEvaluation\\7WondersEvaluation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\bigfo\\Documents\\7WondersApp\\7wondersEvaluation\\7WondersEvaluation\\7WondersEvaluation\\7WondersEvaluation.csproj",
+        "projectUniqueName": "C:\\Users\\bigfo\\Documents\\7WondersApp\\7wondersEvaluation\\7WondersEvaluation\\7WondersEvaluation.csproj",
         "projectName": "7WondersEvaluation",
-        "projectPath": "C:\\Users\\bigfo\\Documents\\7WondersApp\\7wondersEvaluation\\7WondersEvaluation\\7WondersEvaluation\\7WondersEvaluation.csproj",
+        "projectPath": "C:\\Users\\bigfo\\Documents\\7WondersApp\\7wondersEvaluation\\7WondersEvaluation\\7WondersEvaluation.csproj",
         "packagesPath": "C:\\Users\\bigfo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\bigfo\\Documents\\7WondersApp\\7wondersEvaluation\\7WondersEvaluation\\7WondersEvaluation\\obj\\",
+        "outputPath": "C:\\Users\\bigfo\\Documents\\7WondersApp\\7wondersEvaluation\\7WondersEvaluation\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\bigfo\\AppData\\Roaming\\NuGet\\NuGet.Config",

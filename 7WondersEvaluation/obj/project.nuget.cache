@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "3FpFzEvk4GDJDfellCpS/DNu2OwYXmcsuYQ0YwEpi5/1sNIgureflRrCumNWg8uS4GYSwtFBuE7uPCZSZT5WhA==",
+  "dgSpecHash": "TBcsjBa9fK6DoDJMBbM3mHvePkWGLMDyADV2PN+1SoB3+6bISgfBIuoNzUSezqFtDjFXBlTSoplIsEeSNEM7XA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\bigfo\\Documents\\7WondersApp\\7wondersEvaluation\\7WondersEvaluation\\7WondersEvaluation\\7WondersEvaluation.csproj",
+  "projectFilePath": "C:\\Users\\bigfo\\Documents\\7WondersApp\\7wondersEvaluation\\7WondersEvaluation\\7WondersEvaluation.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\bigfo\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\bigfo\\.nuget\\packages\\azure.storage.blobs\\12.18.0\\azure.storage.blobs.12.18.0.nupkg.sha512",
