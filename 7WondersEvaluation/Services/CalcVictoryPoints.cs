@@ -197,6 +197,9 @@ public class CalcVictoryPoints
     public int calcViolet(PlayersInGame pig, PlayersInGame pigLeft, PlayersInGame pigRight)
     {
         int sumViolet = 0;
+        if(pigLeft.PlayerOutlay == null || pigRight.PlayerOutlay == null || pig.PlayerOutlay == null){
+            throw new Exception("invalid data");
+        }
         foreach (string gild in pig.PlayerOutlay.Gilds)
         {
             switch (gild)
