@@ -16,7 +16,7 @@ namespace _7WondersEvaluation.Pages;
 public class IndexModel : PageModel
 {
 
-    private readonly CustomVisionClient _customVisionClient;    
+    private readonly CustomVisionClient _customVisionClient;
     private readonly ILogger<IndexModel> _logger;
 
     private readonly BlobClient _blobClient;
@@ -28,7 +28,7 @@ public class IndexModel : PageModel
     public IndexModel(ILogger<IndexModel> logger, CustomVisionClient customVisionClient, BlobClient blobClient)
     {
         _logger = logger;
-        _customVisionClient = customVisionClient;        
+        _customVisionClient = customVisionClient;
         _blobClient = blobClient;
     }
 
@@ -37,8 +37,8 @@ public class IndexModel : PageModel
 
     }
     public async Task<IActionResult> OnPostAsync()
-    {     
-        try 
+    {
+        try
         {
             var image = Request.Form.Files.GetFile("image");
 
@@ -46,10 +46,10 @@ public class IndexModel : PageModel
             {
                 var imagePath = Path.Combine("uploads", image.FileName);
                 using (var stream = new FileStream(Path.Combine("wwwroot", imagePath), FileMode.Create))
-                {                
-                    await image.CopyToAsync(stream);    
-                    stream.Position =0;
-                    await _blobClient.UploadAsync(stream,image.FileName);
+                {
+                    await image.CopyToAsync(stream);
+                    stream.Position = 0;
+                    await _blobClient.UploadAsync(stream, image.FileName);
                 }
 
                 ImagePath = "/" + imagePath;
@@ -57,14 +57,14 @@ public class IndexModel : PageModel
                 CalcVictoryPoints calcVictoryPoints = new CalcVictoryPoints(Result);
                 //Evaluation = calcVictoryPoints.createEvaluationData();
                 Console.WriteLine(Result);
-            }                    
+            }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-        }   
+        }
         return Page() ?? throw new Exception("Failed to return page.");
-        
+
     }
 
 }

@@ -6,7 +6,7 @@ public class CreateGameModel : PageModel
     private readonly GameContext _context;
 
     public int PlayerCount;
-    
+
 
     public CreateGameModel(GameContext context)
     {
@@ -28,20 +28,20 @@ public class CreateGameModel : PageModel
             GameDate = DateTime.Now, // Use the current date and time
             IsFinished = false, // Set IsFinished to false                       
         };
-        
+
         Players = new List<Player>();
         for (int i = 0; i < PlayerCount; i++)
         {
-            NewGame.PlayersInGame.Add(new PlayersInGame{ Player = new Player{PlayerName = ""}, PositionInGame = i});
-            Players.Add(new Player{ PlayerName = ""});
+            NewGame.PlayersInGame.Add(new PlayersInGame { Player = new Player { PlayerName = "" }, PositionInGame = i });
+            Players.Add(new Player { PlayerName = "" });
         }
 
         return Page();
     }
 
     public IActionResult OnPost()
-    {           
-        
+    {
+
         if (ModelState.IsValid)
         {
             Players.ForEach(player => NewGame.AddPlayer(player));
@@ -49,10 +49,11 @@ public class CreateGameModel : PageModel
             _context.SaveChanges(); // Save the new game to the database
             return RedirectToPage("Games"); // Redirect to the list of open games
         }
-        else {
-             var errors = ModelState.Select(x => x.Value.Errors)
-                           .Where(y=>y.Count>0)
-                           .ToList();
+        else
+        {
+            var errors = ModelState.Select(x => x.Value.Errors)
+                          .Where(y => y.Count > 0)
+                          .ToList();
             Console.WriteLine(errors);
         }
 

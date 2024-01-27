@@ -17,7 +17,7 @@ namespace _7WondersEvaluation.Pages;
 public class EvaluateModel : PageModel
 {
 
-    private readonly CustomVisionClient _customVisionClient;    
+    private readonly CustomVisionClient _customVisionClient;
     private readonly ILogger<EvaluateModel> _logger;
 
     private readonly BlobClient _blobClient;
@@ -25,15 +25,15 @@ public class EvaluateModel : PageModel
     public string? ImagePath { get; private set; }
     public ApiResult? Result { get; private set; }
     public Evaluation? Evaluation { get; private set; }
-    
+
     GameContext _context;
 
-    public PlayersInGame playersInGame { get;  set; }
+    public PlayersInGame playersInGame { get; set; }
 
     public EvaluateModel(ILogger<EvaluateModel> logger, CustomVisionClient customVisionClient, BlobClient blobClient, GameContext context)
     {
         _logger = logger;
-        _customVisionClient = customVisionClient;        
+        _customVisionClient = customVisionClient;
         _blobClient = blobClient;
         _context = context;
     }
@@ -43,21 +43,21 @@ public class EvaluateModel : PageModel
         playersInGame = _context.PlayersInGame.Where(pg => pg.GameId == gameId && pg.PlayerId == playerId).FirstOrDefault();
     }
     public async Task<IActionResult> OnPostAsync(int playerId, int gameId)
-    {     
-        try 
+    {
+        try
         {
             playersInGame = _context.PlayersInGame.Where(pg => pg.GameId == gameId && pg.PlayerId == playerId).Include(pg => pg.Evaluation).Include(pg => pg.PlayerOutlay).AsTracking().FirstOrDefault();
-            
+
             var image = Request.Form.Files.GetFile("image");
 
             if (image != null && image.Length > 0)
             {
                 var imagePath = Path.Combine("uploads", image.FileName);
                 using (var stream = new FileStream(Path.Combine("wwwroot", imagePath), FileMode.Create))
-                {                
-                    await image.CopyToAsync(stream);    
-                    stream.Position =0;
-                    await _blobClient.UploadAsync(stream,image.FileName);
+                {
+                    await image.CopyToAsync(stream);
+                    stream.Position = 0;
+                    await _blobClient.UploadAsync(stream, image.FileName);
                 }
 
                 ImagePath = "/" + imagePath;
@@ -67,15 +67,15 @@ public class EvaluateModel : PageModel
                 playersInGame.PlayerOutlay = calcVictoryPoints.createPlayerOutlay(playersInGame);
                 //Console.WriteLine(Result);
                 Console.WriteLine(_context.ChangeTracker.DebugView.ShortView);
-                _context.SaveChanges();                
-            }                    
+                _context.SaveChanges();
+            }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-        }   
+        }
         return Page() ?? throw new Exception("Failed to return page.");
-        
+
     }
 
 }

@@ -9,13 +9,13 @@ public class GameContext : DbContext
     }
 
     public DbSet<Game> Games { get; set; }
-    public DbSet<Player> Players { get; set; }           
+    public DbSet<Player> Players { get; set; }
 
-    public DbSet<PlayersInGame> PlayersInGame { get; set; }    
+    public DbSet<PlayersInGame> PlayersInGame { get; set; }
 
-    public DbSet<Evaluation> Evaluation { get; set; }          
-    
-    public DbSet<PlayerOutlay> PlayerOutlay { get; set; }           
+    public DbSet<Evaluation> Evaluation { get; set; }
+
+    public DbSet<PlayerOutlay> PlayerOutlay { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -50,7 +50,8 @@ public class GameContext : DbContext
 
 public class Game
 {
-    public Game(){
+    public Game()
+    {
         PlayersInGame = new List<PlayersInGame>();
     }
     public int GameId { get; set; }
@@ -58,40 +59,52 @@ public class Game
 
     public DateTime GameDate { get; set; }
 
-    public bool IsFinished { get; set; }    
+    public bool IsFinished { get; set; }
 
     public List<PlayersInGame> PlayersInGame { get; } = new();
 
-    public void AddPlayer(Player player){
-        PlayersInGame.Add(new PlayersInGame{ Game = this, Player = player, PositionInGame = PlayersInGame.Count});        
+    public void AddPlayer(Player player)
+    {
+        PlayersInGame.Add(new PlayersInGame { Game = this, Player = player, PositionInGame = PlayersInGame.Count });
     }
 
-    public void AddPlayer(Player player, int positionInGame){
-        PlayersInGame.Add(new PlayersInGame{ Game = this, Player = player, PositionInGame = positionInGame});        
+    public void AddPlayer(Player player, int positionInGame)
+    {
+        PlayersInGame.Add(new PlayersInGame { Game = this, Player = player, PositionInGame = positionInGame });
     }
 
-    public bool IsEvaluated(){        
-        foreach (var player in this.PlayersInGame){            
+    public bool IsEvaluated()
+    {
+        foreach (var player in this.PlayersInGame)
+        {
             if (player.Evaluation == null)
-            {                
+            {
                 return false;
-            }            
-        }    
-        return true;    
+            }
+        }
+        return true;
     }
-    
-    public int GetPositionLeft(int positionInGame){
-        if(positionInGame == 0){
-            return PlayersInGame.Count()-1;
-        }else{
-            return positionInGame -1;
-        }        
-    }  
 
-    public int GetPositionRight(int positionInGame){
-         if(positionInGame == (PlayersInGame.Count() -1)){
+    public int GetPositionLeft(int positionInGame)
+    {
+        if (positionInGame == 0)
+        {
+            return PlayersInGame.Count() - 1;
+        }
+        else
+        {
+            return positionInGame - 1;
+        }
+    }
+
+    public int GetPositionRight(int positionInGame)
+    {
+        if (positionInGame == (PlayersInGame.Count() - 1))
+        {
             return 0;
-        }else{
+        }
+        else
+        {
             return positionInGame + 1;
         }
     }
@@ -101,34 +114,34 @@ public class Game
 public class Player
 {
     public int PlayerId { get; set; }
-    public required string PlayerName { get; set; }    
-    
+    public required string PlayerName { get; set; }
+
     public List<PlayersInGame> PlayersInGame { get; } = new();
 }
 
-public class PlayersInGame 
+public class PlayersInGame
 {
     public int GameId { get; set; }
-    public int PlayerId {get; set;}
+    public int PlayerId { get; set; }
 
-    public virtual Game Game  {get; set; }
-    public virtual Player Player  {get; set; }
+    public virtual Game Game { get; set; }
+    public virtual Player Player { get; set; }
 
-    public int PositionInGame {get; set;}   
+    public int PositionInGame { get; set; }
 
-    public virtual PlayerOutlay? PlayerOutlay {get; set;}
-    public virtual Evaluation? Evaluation {get; set;}  
+    public virtual PlayerOutlay? PlayerOutlay { get; set; }
+    public virtual Evaluation? Evaluation { get; set; }
 }
 
 public class PlayerOutlay
 {
-    
+
     public int PlayerOutlayId { get; set; }
 
     public int GameId { get; set; }
 
     public int PlayerId { get; set; }
-    public virtual PlayersInGame PlayersInGame {get; set;}
+    public virtual PlayersInGame PlayersInGame { get; set; }
     public int CountBlue { get; set; }
     public int CountRed { get; set; }
     public int CountGreen { get; set; }
@@ -138,17 +151,17 @@ public class PlayerOutlay
     public int CountGild { get; set; }
     public int CountExpa { get; set; }
     public int CountWarMarker { get; set; }
-    public int CountNegWarMarker { get; set; }    
+    public int CountNegWarMarker { get; set; }
     public string[] Gilds { get; set; }
-           
+
 }
 
 public class Evaluation
 {
-    public int EvaluationId { get; set; } 
+    public int EvaluationId { get; set; }
     public int GameId { get; set; }
     public int PlayerId { get; set; }
-    public virtual PlayersInGame PlayersInGame {get; set;}
+    public virtual PlayersInGame PlayersInGame { get; set; }
     public int Red { get; set; } = 0;
     public int Coins { get; set; } = 0;
     public int ExpansionStages { get; set; } = 0;
@@ -157,7 +170,8 @@ public class Evaluation
     public int Violet { get; set; } = 0;
     public int Green { get; set; } = 0;
 
-    public int Sum(){
+    public int Sum()
+    {
         return Red + Coins + ExpansionStages + Blue + Yellow + Violet + Green;
     }
 }
