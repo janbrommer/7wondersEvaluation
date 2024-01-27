@@ -99,7 +99,7 @@ public class Game
 
     public int GetPositionRight(int positionInGame)
     {
-        if (positionInGame == (PlayersInGame.Count() - 1))
+        if (positionInGame == (PlayersInGame.Count - 1))
         {
             return 0;
         }
