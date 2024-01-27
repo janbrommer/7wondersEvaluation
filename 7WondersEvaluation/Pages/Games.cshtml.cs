@@ -29,6 +29,5 @@ public class OpenGamesModel : PageModel
         Console.WriteLine(_context.ChangeTracker.DebugView.ShortView);
         _context.SaveChangesAsync();
         OpenGames = await _context.Games.Where(g => g.IsFinished == false).Include(g => g.PlayersInGame).ThenInclude(pg => pg.Evaluation).ToListAsync();
-        in eins = 1 + 1+1 ;
     }
 }

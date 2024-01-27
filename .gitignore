@@ -3,23 +3,21 @@
 
 *.pdb
 
-7WondersEvaluation/7WondersEvaluation/wwwroot/uploads/
+7WondersEvaluation/wwwroot/uploads/
 
-7WondersEvaluation/7WondersEvaluation/bin/Debug/net7.0/7WondersEvaluation.exe
+7WondersEvaluation/bin/Debug/net7.0/7WondersEvaluation.exe
 
-7WondersEvaluation/7WondersEvaluation/obj/Debug/net7.0/
+7WondersEvaluation/obj/Debug/net7.0/
 
-7WondersEvaluation/7WondersEvaluation/obj/project.nuget.cache
+7WondersEvaluation/obj/project.nuget.cache
 
-7WondersEvaluation/7WondersEvaluation/bin/Debug/net7.0/
+7WondersEvaluation/bin/Debug/net7.0/
 
-7WondersEvaluation/7WondersEvaluation/obj/
+7WondersEvaluation/obj/
 
 *.db
-7WondersEvaluation/7WondersEvaluation/7wonders.db-wal
-7WondersEvaluation/7WondersEvaluation/7wonders.db-shm
-7WondersEvaluation/7WondersEvaluation/appsettings.json
-7WondersEvaluation/7WondersEvaluation/appsettings.Development.json
+7WondersEvaluation/7wonders.db-wal
+7WondersEvaluation/7wonders.db-shm
 7WondersEvaluation/obj/project.nuget.cache
 7WondersEvaluation/obj/project.assets.json
 7WondersEvaluation/obj/Debug/net7.0/project.razor.vscode.bin
