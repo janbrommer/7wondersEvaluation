@@ -17,9 +17,17 @@ public class OpenGamesModel : PageModel
         _context = context;
     }
 
-        public async Task OnGetAsync()
+    public async Task OnGetAsync()
     {
         // Load the list of games from the database
-        OpenGames = await _context.Games.Where(g => g.IsFinished == false).ToListAsync();
+        OpenGames = await _context.Games.Where(g => g.IsFinished == false).Include(g => g.PlayersInGame).ThenInclude(pg => pg.Evaluation).ToListAsync();
+    }
+    public async Task OnPostMyDeleteAsync(int GameId)
+    {                
+        Game game = await _context.Games.Where(g => g.GameId == GameId).Include(pg => pg.PlayersInGame).ThenInclude(pg => pg.Evaluation).Include(pg => pg.PlayersInGame).ThenInclude(pg => pg.PlayerOutlay).FirstOrDefaultAsync();
+        _context.Remove(game);
+        Console.WriteLine(_context.ChangeTracker.DebugView.ShortView);
+        _context.SaveChangesAsync();
+        OpenGames = await _context.Games.Where(g => g.IsFinished == false).Include(g => g.PlayersInGame).ThenInclude(pg => pg.Evaluation).ToListAsync();
     }
 }

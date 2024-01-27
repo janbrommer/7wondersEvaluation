@@ -7,8 +7,23 @@
 
 <ul>
     @foreach (var game in Model.OpenGames)
-    {
-        <li>@game.GameName <a asp-page="JoinGame" asp-route-gameId="@game.GameId">Beitreten</a></li>
+    {        
+        <li>
+        @game.GameName
+        
+        @if (game.IsEvaluated())
+        {            
+            <a asp-page="Result" asp-route-gameId="@game.GameId">Auswerten</a>        
+        }
+        else
+        {
+            <a asp-page="JoinGame" asp-route-gameId="@game.GameId">Beitreten</a>        
+        } 
+        <form method="post"  style="display: inline;">
+            <button type="submit" asp-page-handler="MyDelete" asp-route-gameId="@game.GameId" style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">Löschen</button>
+        </form>    
+    </li>
+
     }
 </ul>
 

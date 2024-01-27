@@ -5,7 +5,7 @@
 }
 @inject GameContext _context
 
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" asp-route-gameId="@Model.playersInGame.GameId" asp-route-playerId="@Model.playersInGame.PlayerId">
     <input type="file" name="image" accept="image/*" />
     <button type="submit">Upload</button>
 </form>
@@ -18,7 +18,7 @@
     </div>
 }
 
-@if (Model.Evaluation != null)
+@if (Model.playersInGame.Evaluation != null)
 {
     <div id="tableContainer" style="margin-top: auto;">
         <table>
@@ -30,40 +30,36 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Name</td>
-                    <td>@Model.Evaluation.Name</td>
-                </tr>
-                <tr>
                     <td>Red</td>
-                    <td>@Model.Evaluation.Red</td>
+                    <td>@Model.playersInGame.Evaluation.Red</td>
                 </tr>
                 <tr>
                     <td>Coins</td>
-                    <td>@Model.Evaluation.Coins</td>
+                    <td>@Model.playersInGame.Evaluation.Coins</td>
                 </tr>
                 <tr>
                     <td>Expansion Stages</td>
-                    <td>@Model.Evaluation.ExpansionStages</td>
+                    <td>@Model.playersInGame.Evaluation.ExpansionStages</td>
                 </tr>
                 <tr>
                     <td>Blue</td>
-                    <td>@Model.Evaluation.Blue</td>
+                    <td>@Model.playersInGame.Evaluation.Blue</td>
                 </tr>
                 <tr>
                     <td>Yellow</td>
-                    <td>@Model.Evaluation.Yellow</td>
+                    <td>@Model.playersInGame.Evaluation.Yellow</td>
                 </tr>
                 <tr>
                     <td>Violet</td>
-                    <td>@Model.Evaluation.Violet</td>
+                    <td>@Model.playersInGame.Evaluation.Violet</td>
                 </tr>
                 <tr>
                     <td>Green</td>
-                    <td>@Model.Evaluation.Green</td>
+                    <td>@Model.playersInGame.Evaluation.Green</td>
                 </tr>
                 <tr>
                     <td>Sum</td>
-                    <td>@Model.Evaluation.Sum</td>
+                    <td>@Model.playersInGame.Evaluation.Sum()</td>
                 </tr>
             </tbody>
         </table>

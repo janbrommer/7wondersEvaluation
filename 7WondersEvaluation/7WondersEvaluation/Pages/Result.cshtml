@@ -1,0 +1,27 @@
+@page
+@model ResultGameModel
+
+@inject GameContext _context
+
+<h1>Rank</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Evaluation Id</th>
+            <th>Game Id</th>
+            <th>Player Id</th>
+            <!-- Add other relevant headers -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var playersInGame in Model.ThisGame.PlayersInGame)
+        {
+            <tr>                                
+                <td>@playersInGame.Player.PlayerName</td>
+                <td>@playersInGame.Evaluation.Sum()</td>                
+                <!-- Add other relevant columns based on your model -->
+            </tr>
+        }
+    </tbody>
+</table>

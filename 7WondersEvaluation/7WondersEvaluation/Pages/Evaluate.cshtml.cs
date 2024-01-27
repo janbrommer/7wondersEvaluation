@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks.Dataflow;
 using Microsoft.Extensions.Options;
 using System.Reflection.Metadata;
+using Microsoft.EntityFrameworkCore;
 
 
 
@@ -23,11 +24,11 @@ public class EvaluateModel : PageModel
 
     public string? ImagePath { get; private set; }
     public ApiResult? Result { get; private set; }
-    public EvaluationData? Evaluation { get; private set; }
+    public Evaluation? Evaluation { get; private set; }
     
     GameContext _context;
 
-    private PlayersInGame playersInGame { get;  set; }
+    public PlayersInGame playersInGame { get;  set; }
 
     public EvaluateModel(ILogger<EvaluateModel> logger, CustomVisionClient customVisionClient, BlobClient blobClient, GameContext context)
     {
@@ -41,10 +42,12 @@ public class EvaluateModel : PageModel
     {
         playersInGame = _context.PlayersInGame.Where(pg => pg.GameId == gameId && pg.PlayerId == playerId).FirstOrDefault();
     }
-    public async Task<IActionResult> OnPostAsync()
+    public async Task<IActionResult> OnPostAsync(int playerId, int gameId)
     {     
         try 
         {
+            playersInGame = _context.PlayersInGame.Where(pg => pg.GameId == gameId && pg.PlayerId == playerId).Include(pg => pg.Evaluation).Include(pg => pg.PlayerOutlay).AsTracking().FirstOrDefault();
+            
             var image = Request.Form.Files.GetFile("image");
 
             if (image != null && image.Length > 0)
@@ -60,8 +63,11 @@ public class EvaluateModel : PageModel
                 ImagePath = "/" + imagePath;
                 Result = await _customVisionClient.PredictImageAsync(image.OpenReadStream()) ?? throw new Exception("Failed to get result.");
                 CalcVictoryPoints calcVictoryPoints = new CalcVictoryPoints(Result);
-                Evaluation = calcVictoryPoints.createEvaluationData();
-                Console.WriteLine(Result);
+                playersInGame.Evaluation = calcVictoryPoints.createEvaluationData(playersInGame);
+                playersInGame.PlayerOutlay = calcVictoryPoints.createPlayerOutlay(playersInGame);
+                //Console.WriteLine(Result);
+                Console.WriteLine(_context.ChangeTracker.DebugView.ShortView);
+                _context.SaveChanges();                
             }                    
         }
         catch (Exception ex)

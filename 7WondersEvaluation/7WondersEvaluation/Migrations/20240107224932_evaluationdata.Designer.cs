@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _7WondersEvaluation.Migrations
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20240107224932_evaluationdata")]
+    partial class evaluationdata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
@@ -99,9 +102,6 @@ namespace _7WondersEvaluation.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CountBlue")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("CountBrown")
                         .HasColumnType("INTEGER");
 
@@ -131,10 +131,6 @@ namespace _7WondersEvaluation.Migrations
 
                     b.Property<int>("GameId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Gilds")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<int>("PlayerId")
                         .HasColumnType("INTEGER");

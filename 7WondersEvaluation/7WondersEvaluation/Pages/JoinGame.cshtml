@@ -8,7 +8,13 @@
 <ul>
     @foreach (var playerInGame in Model.game.PlayersInGame)
     {
-        <li>@playerInGame.Player.PlayerName <a asp-page="Evaluate" asp-route-gameId="@playerInGame.GameId" asp-route-playerId="@playerInGame.PlayerId">Evaluate</a></li>
+        <li>
+            @playerInGame.Player.PlayerName
+            @if (playerInGame.Evaluation == null)
+            {
+                <a asp-page="Evaluate" asp-route-gameId="@playerInGame.GameId" asp-route-playerId="@playerInGame.PlayerId">Evaluate</a>
+            }
+        </li>
     }
 </ul>
 
