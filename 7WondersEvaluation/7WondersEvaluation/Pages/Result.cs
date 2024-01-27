@@ -20,8 +20,7 @@ public class ResultGameModel : PageModel
     {
         CalcVictoryPoints calcVictoryPoints = new CalcVictoryPoints();
         // Load the list of games from the database
-        ThisGame = await _context.Games.Where(g => g.GameId == GameId).Include(g => g.PlayersInGame).ThenInclude(pg => pg.Evaluation).Include(g => g.PlayersInGame).ThenInclude(pg => pg.Player).Include(g => g.PlayersInGame).ThenInclude(pg => pg.PlayerOutlay).FirstOrDefaultAsync();        
-        ThisGame.PlayersInGame.OrderBy(pig => pig.Evaluation.Sum());
+        ThisGame = await _context.Games.Where(g => g.GameId == GameId).Include(g => g.PlayersInGame).ThenInclude(pg => pg.Evaluation).Include(g => g.PlayersInGame).ThenInclude(pg => pg.Player).Include(g => g.PlayersInGame).ThenInclude(pg => pg.PlayerOutlay).AsTracking().FirstOrDefaultAsync();                
         foreach(PlayersInGame pig in ThisGame.PlayersInGame){            
             int PositionLeft = ThisGame.GetPositionLeft(pig.PositionInGame);
             int PositionRight =  ThisGame.GetPositionRight(pig.PositionInGame);
@@ -29,5 +28,9 @@ public class ResultGameModel : PageModel
             PlayersInGame playersInGameRight = ThisGame.PlayersInGame.Where(pos => pos.PositionInGame == PositionRight).FirstOrDefault();
             pig.Evaluation.Violet = calcVictoryPoints.calcViolet(pig, playersInGameLeft, playersInGameRight);            
         }
+        ThisGame.PlayersInGame.OrderBy(pig => pig.Evaluation.Sum());
+        ThisGame.IsFinished = true;
+        Console.WriteLine(_context.ChangeTracker.DebugView.ShortView);
+        _context.SaveChangesAsync();
     }
 }
