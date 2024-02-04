@@ -6,14 +6,19 @@
 7WondersEvaluation/wwwroot/uploads/
 
 7WondersEvaluation/bin/Debug/net7.0/7WondersEvaluation.exe
+7WondersEvaluation.Test/bin/Debug/net7.0/7WondersEvaluation.exe
 
 7WondersEvaluation/obj/Debug/net7.0/
+7WondersEvaluation.Test/obj/Debug/net7.0/
 
 7WondersEvaluation/obj/project.nuget.cache
+7WondersEvaluation.Test/obj/project.nuget.cache
 
 7WondersEvaluation/bin/Debug/net7.0/
+7WondersEvaluation.Test/bin/Debug/net7.0/
 
 7WondersEvaluation/obj/
+7WondersEvaluation.Test/obj/
 
 *.db
 7WondersEvaluation/7wonders.db-wal
