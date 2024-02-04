@@ -28,8 +28,7 @@ public class ResultGameModel : PageModel
             PlayersInGame playersInGameLeft = ThisGame.PlayersInGame.Where(pos => pos.PositionInGame == PositionLeft).FirstOrDefault();
             PlayersInGame playersInGameRight = ThisGame.PlayersInGame.Where(pos => pos.PositionInGame == PositionRight).FirstOrDefault();
             pig.Evaluation.Violet = calcVictoryPoints.calcViolet(pig, playersInGameLeft, playersInGameRight);
-        }
-        ThisGame.PlayersInGame.OrderBy(pig => pig.Evaluation.Sum());
+        }        
         ThisGame.IsFinished = true;
         Console.WriteLine(_context.ChangeTracker.DebugView.ShortView);
         _context.SaveChangesAsync();
