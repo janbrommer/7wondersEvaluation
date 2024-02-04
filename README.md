@@ -5,3 +5,5 @@ This project is intended to simplify the evaluation of the game "7 Wonders". It 
 - ASP.NET Razor
 - EF Core
 - Azure Costom Vision
+- SonarCloud
+- Coderabbit
