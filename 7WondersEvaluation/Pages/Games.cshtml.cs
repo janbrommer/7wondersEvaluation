@@ -24,7 +24,7 @@ public class OpenGamesModel : PageModel
     }
     public async Task OnPostMyDeleteAsync(int GameId)
     {
-        Game game = await _context.Games.Where(g => g.GameId == GameId).Include(pg => pg.PlayersInGame).ThenInclude(pg => pg.Evaluation).Include(pg => pg.PlayersInGame).ThenInclude(pg => pg.PlayerOutlay).FirstOrDefaultAsync();
+        Game game = await _context.Games.Where(g => g.GameId == GameId).Include(pg => pg.PlayersInGame).ThenInclude(pg => pg.Evaluation).Include(pg => pg.PlayersInGame).ThenInclude(pg => pg.PlayerOutlay).AsTracking().FirstOrDefaultAsync();
         _context.Remove(game);
         Console.WriteLine(_context.ChangeTracker.DebugView.ShortView);
         _context.SaveChangesAsync();

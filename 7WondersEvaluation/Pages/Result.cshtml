@@ -15,7 +15,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var playersInGame in Model.ThisGame.PlayersInGame)
+        @foreach (var playersInGame in Model.ThisGame.GetPlayersInGameOrderedBySum())
         {
             <tr>                                
                 <td>@playersInGame.Player.PlayerName</td>

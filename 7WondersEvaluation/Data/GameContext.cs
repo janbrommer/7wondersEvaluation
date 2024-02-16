@@ -109,6 +109,10 @@ public class Game
         }
     }
 
+    public List<PlayersInGame> GetPlayersInGameOrderedBySum(){        
+        return PlayersInGame.OrderByDescending(pig => pig.Evaluation.Sum()).ToList();        
+    }
+
 }
 
 public class Player
