@@ -42,9 +42,10 @@ public class GameContext : DbContext
         builder.Entity<PlayerOutlay>()
             .Property(e => e.Gilds)
             .HasConversion(
-                v => string.Join(',', v),
+                v => string.Join(',', v ?? new string[0]),
                 v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
     }
+
 
 }
 
@@ -109,9 +110,14 @@ public class Game
         }
     }
 
-    public List<PlayersInGame> GetPlayersInGameOrderedBySum(){        
-        return PlayersInGame.OrderByDescending(pig => pig.Evaluation.Sum()).ToList();        
+    public List<PlayersInGame> GetPlayersInGameOrderedBySum()
+    {
+        return PlayersInGame.Where(pig => pig.Evaluation != null)
+                            .OrderByDescending(pig => pig.Evaluation?.Sum() ?? 0)
+                            .ToList();
     }
+
+
 
 }
 
@@ -128,8 +134,8 @@ public class PlayersInGame
     public int GameId { get; set; }
     public int PlayerId { get; set; }
 
-    public virtual Game Game { get; set; }
-    public virtual Player Player { get; set; }
+    public virtual required Game Game { get; set; }
+    public virtual required Player Player { get; set; }
 
     public int PositionInGame { get; set; }
 
@@ -145,7 +151,7 @@ public class PlayerOutlay
     public int GameId { get; set; }
 
     public int PlayerId { get; set; }
-    public virtual PlayersInGame PlayersInGame { get; set; }
+    public virtual required PlayersInGame PlayersInGame { get; set; }
     public int CountBlue { get; set; }
     public int CountRed { get; set; }
     public int CountGreen { get; set; }
@@ -156,7 +162,7 @@ public class PlayerOutlay
     public int CountExpa { get; set; }
     public int CountWarMarker { get; set; }
     public int CountNegWarMarker { get; set; }
-    public string[] Gilds { get; set; }
+    public string[]? Gilds { get; set; }
 
 }
 
@@ -165,7 +171,7 @@ public class Evaluation
     public int EvaluationId { get; set; }
     public int GameId { get; set; }
     public int PlayerId { get; set; }
-    public virtual PlayersInGame PlayersInGame { get; set; }
+    public virtual required PlayersInGame PlayersInGame { get; set; }
     public int Red { get; set; } = 0;
     public int Coins { get; set; } = 0;
     public int ExpansionStages { get; set; } = 0;
