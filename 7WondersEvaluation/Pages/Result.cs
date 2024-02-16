@@ -31,6 +31,6 @@ public class ResultGameModel : PageModel
         }        
         ThisGame.IsFinished = true;
         Console.WriteLine(_context.ChangeTracker.DebugView.ShortView);
-        _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();        
     }
 }
