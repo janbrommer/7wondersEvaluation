@@ -6,7 +6,7 @@ namespace _7WondersEvaluation.Pages;
 public class ResultGameModel : PageModel
 {
     private readonly ILogger<OpenGamesModel> _logger;
-    public Game? ThisGame { get; set; } 
+    public Game? ThisGame { get; set; }
 
     GameContext _context;
 
@@ -14,7 +14,7 @@ public class ResultGameModel : PageModel
     {
         _logger = logger;
         _context = context;
-        ThisGame = null;    
+        ThisGame = null;
     }
 
     public async Task OnGetAsync(int GameId)

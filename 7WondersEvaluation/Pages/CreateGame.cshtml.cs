@@ -32,7 +32,7 @@ public class CreateGameModel : PageModel
         Players = new List<Player>();
         for (int i = 0; i < PlayerCount; i++)
         {
-            NewGame.PlayersInGame.Add(new PlayersInGame { Player = new Player { PlayerName = "" }, PositionInGame = i });
+            NewGame.PlayersInGame.Add(new PlayersInGame { Player = new Player { PlayerName = "" }, PositionInGame = i , Game = NewGame});
             Players.Add(new Player { PlayerName = "" });
         }
 
