@@ -79,7 +79,7 @@ public class EvaluateModel : PageModel
                     _context.SaveChanges();
                 }
             }else{
-                throw new Exception("Player not found");
+                throw new PlayerNotFoundException("Player not found");
             }
         }
         catch (Exception ex)

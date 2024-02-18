@@ -11,7 +11,7 @@ namespace _7WondersEvaluation.Migrations
 {
     [DbContext(typeof(GameContext))]
     [Migration("20240107224932_evaluationdata")]
-    partial class evaluationdata
+    partial class Evaluationdata
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
