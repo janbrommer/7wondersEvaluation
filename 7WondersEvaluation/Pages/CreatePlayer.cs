@@ -5,13 +5,14 @@ public class CreatePlayerModel : PageModel
 {
     private readonly GameContext _context;
 
+    [BindProperty]
+    public Player NewPlayer { get; set; } = default!;
+
     public CreatePlayerModel(GameContext context)
     {
         _context = context;
     }
 
-    [BindProperty]
-    public Player NewPlayer { get; set; }
 
     public IActionResult OnGet()
     {
