@@ -5,7 +5,7 @@
 namespace _7WondersEvaluation.Migrations
 {
     /// <inheritdoc />
-    public partial class makeiteasy : Migration
+    public partial class Makeiteasy : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

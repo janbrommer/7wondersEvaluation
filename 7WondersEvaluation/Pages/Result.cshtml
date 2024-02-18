@@ -15,11 +15,11 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var playersInGame in Model.ThisGame.GetPlayersInGameOrderedBySum())
+        @foreach (var playersInGame in Model?.ThisGame?.GetPlayersInGameOrderedBySum() ?? Enumerable.Empty<PlayersInGame>())
         {
             <tr>                                
                 <td>@playersInGame.Player.PlayerName</td>
-                <td>@playersInGame.Evaluation.Sum()</td>                
+                <td>@playersInGame?.Evaluation?.Sum() </td>                
                 <!-- Add other relevant columns based on your model -->
             </tr>
         }

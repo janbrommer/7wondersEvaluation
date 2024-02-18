@@ -7,7 +7,7 @@ namespace _7WondersEvaluation.Pages;
 public class OpenGamesModel : PageModel
 {
     private readonly ILogger<OpenGamesModel> _logger;
-    public List<Game> OpenGames { get; set; }
+    public List<Game> OpenGames { get; set; } = default!;
 
     GameContext _context;
 
@@ -24,10 +24,10 @@ public class OpenGamesModel : PageModel
     }
     public async Task OnPostMyDeleteAsync(int GameId)
     {
-        Game game = await _context.Games.Where(g => g.GameId == GameId).Include(pg => pg.PlayersInGame).ThenInclude(pg => pg.Evaluation).Include(pg => pg.PlayersInGame).ThenInclude(pg => pg.PlayerOutlay).AsTracking().FirstOrDefaultAsync();
+        Game game = await _context.Games.Where(g => g.GameId == GameId).Include(pg => pg.PlayersInGame).ThenInclude(pg => pg.Evaluation).Include(pg => pg.PlayersInGame).ThenInclude(pg => pg.PlayerOutlay).AsTracking().FirstAsync();
         _context.Remove(game);
         Console.WriteLine(_context.ChangeTracker.DebugView.ShortView);
-        _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
         OpenGames = await _context.Games.Where(g => g.IsFinished == false).Include(g => g.PlayersInGame).ThenInclude(pg => pg.Evaluation).ToListAsync();
     }
 }
