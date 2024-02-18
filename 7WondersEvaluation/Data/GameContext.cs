@@ -54,7 +54,9 @@ public class Game
     public Game()
     {
         PlayersInGame = new List<PlayersInGame>();
+        GameName = "New Game";
     }
+
     public int GameId { get; set; }
     public required string GameName { get; set; }
 

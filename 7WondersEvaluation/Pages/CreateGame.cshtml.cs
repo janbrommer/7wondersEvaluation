@@ -8,7 +8,7 @@ public class CreateGameModel : PageModel
     public int PlayerCount;
 
     [BindProperty]
-    public Game? NewGame { get; set; }
+    public Game NewGame { get; set; } = default!;
 
     [BindProperty]
     public List<Player> Players { get; set; }
@@ -16,8 +16,7 @@ public class CreateGameModel : PageModel
     public CreateGameModel(GameContext context)
     {
         _context = context;
-        PlayerCount = 3;
-        NewGame = null;
+        PlayerCount = 3;        
         Players = new List<Player>();
     }
 

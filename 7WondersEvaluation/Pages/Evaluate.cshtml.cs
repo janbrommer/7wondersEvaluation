@@ -28,7 +28,7 @@ public class EvaluateModel : PageModel
 
     GameContext _context;
 
-    public PlayersInGame? playersInGame { get; set; }
+    public PlayersInGame playersInGame { get; set; } = default!;
 
     public EvaluateModel(ILogger<EvaluateModel> logger, CustomVisionClient customVisionClient, BlobClient blobClient, GameContext context)
     {
@@ -41,18 +41,19 @@ public class EvaluateModel : PageModel
     public void OnGet(int playerId, int gameId)
     {
         var playersInGameQuery = _context.PlayersInGame.Where(pg => pg.GameId == gameId && pg.PlayerId == playerId);
-        if (playersInGameQuery.Any())
+        if (playersInGameQuery != null && playersInGameQuery.Any())
         {
-            playersInGame = playersInGameQuery.FirstOrDefault();
+            playersInGame = playersInGameQuery.First();
         }
     }
+
 
 
     public async Task<IActionResult> OnPostAsync(int playerId, int gameId)
     {
         try
         {
-            playersInGame = _context.PlayersInGame.Where(pg => pg.GameId == gameId && pg.PlayerId == playerId).Include(pg => pg.Evaluation).Include(pg => pg.PlayerOutlay).AsTracking().FirstOrDefault();
+            playersInGame = _context.PlayersInGame.Where(pg => pg.GameId == gameId && pg.PlayerId == playerId).Include(pg => pg.Evaluation).Include(pg => pg.PlayerOutlay).AsTracking().First();
 
             if (playersInGame != null)
             {
