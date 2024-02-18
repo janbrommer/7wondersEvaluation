@@ -11,7 +11,7 @@ namespace _7WondersEvaluation.Migrations
 {
     [DbContext(typeof(GameContext))]
     [Migration("20240216194434_requried")]
-    partial class requried
+    partial class requriedRefs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -13,15 +13,14 @@ public class ResultGameModel : PageModel
     public ResultGameModel(ILogger<OpenGamesModel> logger, GameContext context)
     {
         _logger = logger;
-        _context = context;
-        ThisGame = null;
+        _context = context;                
     }
 
     public async Task OnGetAsync(int GameId)
     {
         CalcVictoryPoints calcVictoryPoints = new CalcVictoryPoints();
         // Load the list of games from the database
-        ThisGame = await _context.Games.Where(g => g.GameId == GameId).Include(g => g.PlayersInGame).ThenInclude(pg => pg.Evaluation).Include(g => g.PlayersInGame).ThenInclude(pg => pg.Player).Include(g => g.PlayersInGame).ThenInclude(pg => pg.PlayerOutlay).AsTracking().FirstOrDefaultAsync();
+        ThisGame = await _context.Games.Where(g => g.GameId == GameId).Include(g => g.PlayersInGame).ThenInclude(pg => pg.Evaluation).Include(g => g.PlayersInGame).ThenInclude(pg => pg.Player).Include(g => g.PlayersInGame).ThenInclude(pg => pg.PlayerOutlay).AsTracking().FirstAsync();
         if (ThisGame != null)
         {
             foreach (PlayersInGame pig in ThisGame.PlayersInGame)

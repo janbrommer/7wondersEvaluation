@@ -7,18 +7,19 @@ public class CreateGameModel : PageModel
 
     public int PlayerCount;
 
+    [BindProperty]
+    public Game? NewGame { get; set; }
+
+    [BindProperty]
+    public List<Player> Players { get; set; }
 
     public CreateGameModel(GameContext context)
     {
         _context = context;
         PlayerCount = 3;
+        NewGame = null;
+        Players = new List<Player>();
     }
-
-    [BindProperty]
-    public Game NewGame { get; set; }
-
-    [BindProperty]
-    public List<Player> Players { get; set; }
 
     public IActionResult OnGet()
     {
@@ -44,16 +45,21 @@ public class CreateGameModel : PageModel
 
         if (ModelState.IsValid)
         {
-            Players.ForEach(player => NewGame.AddPlayer(player));
-            _context.Games.Add(NewGame);
-            _context.SaveChanges(); // Save the new game to the database
-            return RedirectToPage("Games"); // Redirect to the list of open games
+            if (NewGame != null && Players != null)
+            {
+                Players.ForEach(NewGame.AddPlayer);
+                _context.Games.Add(NewGame);
+                _context.SaveChanges(); // Save the new game to the database
+                return RedirectToPage("Games"); // Redirect to the list of open games
+            }
         }
         else
         {
-            var errors = ModelState.Select(x => x.Value.Errors)
-                          .Where(y => y.Count > 0)
-                          .ToList();
+            var errors = ModelState.Values
+                      .SelectMany(x => x.Errors)
+                      .Where(e => e != null && !string.IsNullOrEmpty(e.ErrorMessage))
+                      .ToList();
+
             Console.WriteLine(errors);
         }
 

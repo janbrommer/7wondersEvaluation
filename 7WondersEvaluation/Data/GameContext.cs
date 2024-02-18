@@ -162,7 +162,7 @@ public class PlayerOutlay
     public int CountExpa { get; set; }
     public int CountWarMarker { get; set; }
     public int CountNegWarMarker { get; set; }
-    public string[]? Gilds { get; set; }
+    public string[] Gilds { get; set; } = default!;
 
 }
 

@@ -28,7 +28,7 @@ public class EvaluateModel : PageModel
 
     GameContext _context;
 
-    public PlayersInGame playersInGame { get; set; }
+    public PlayersInGame? playersInGame { get; set; }
 
     public EvaluateModel(ILogger<EvaluateModel> logger, CustomVisionClient customVisionClient, BlobClient blobClient, GameContext context)
     {
@@ -40,34 +40,45 @@ public class EvaluateModel : PageModel
 
     public void OnGet(int playerId, int gameId)
     {
-        playersInGame = _context.PlayersInGame.Where(pg => pg.GameId == gameId && pg.PlayerId == playerId).FirstOrDefault();
+        var playersInGameQuery = _context.PlayersInGame.Where(pg => pg.GameId == gameId && pg.PlayerId == playerId);
+        if (playersInGameQuery.Any())
+        {
+            playersInGame = playersInGameQuery.FirstOrDefault();
+        }
     }
+
+
     public async Task<IActionResult> OnPostAsync(int playerId, int gameId)
     {
         try
         {
             playersInGame = _context.PlayersInGame.Where(pg => pg.GameId == gameId && pg.PlayerId == playerId).Include(pg => pg.Evaluation).Include(pg => pg.PlayerOutlay).AsTracking().FirstOrDefault();
 
-            var image = Request.Form.Files.GetFile("image");
-
-            if (image != null && image.Length > 0)
+            if (playersInGame != null)
             {
-                var imagePath = Path.Combine("uploads", image.FileName);
-                using (var stream = new FileStream(Path.Combine("wwwroot", imagePath), FileMode.Create))
-                {
-                    await image.CopyToAsync(stream);
-                    stream.Position = 0;
-                    await _blobClient.UploadAsync(stream, image.FileName);
-                }
+                var image = Request.Form.Files.GetFile("image");
 
-                ImagePath = "/" + imagePath;
-                Result = await _customVisionClient.PredictImageAsync(image.OpenReadStream()) ?? throw new Exception("Failed to get result.");
-                CalcVictoryPoints calcVictoryPoints = new CalcVictoryPoints(Result);
-                playersInGame.Evaluation = calcVictoryPoints.createEvaluationData(playersInGame);
-                playersInGame.PlayerOutlay = calcVictoryPoints.createPlayerOutlay(playersInGame);
-                //Console.WriteLine(Result);
-                Console.WriteLine(_context.ChangeTracker.DebugView.ShortView);
-                _context.SaveChanges();
+                if (image != null && image.Length > 0)
+                {
+                    var imagePath = Path.Combine("uploads", image.FileName);
+                    using (var stream = new FileStream(Path.Combine("wwwroot", imagePath), FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                        stream.Position = 0;
+                        await _blobClient.UploadAsync(stream, image.FileName);
+                    }
+
+                    ImagePath = "/" + imagePath;
+                    Result = await _customVisionClient.PredictImageAsync(image.OpenReadStream()) ?? throw new Exception("Failed to get result.");
+                    CalcVictoryPoints calcVictoryPoints = new CalcVictoryPoints(Result);
+                    playersInGame.Evaluation = calcVictoryPoints.createEvaluationData(playersInGame);
+                    playersInGame.PlayerOutlay = calcVictoryPoints.createPlayerOutlay(playersInGame);
+                    //Console.WriteLine(Result);
+                    Console.WriteLine(_context.ChangeTracker.DebugView.ShortView);
+                    _context.SaveChanges();
+                }
+            }else{
+                throw new Exception("Player not found");
             }
         }
         catch (Exception ex)
@@ -77,5 +88,6 @@ public class EvaluateModel : PageModel
         return Page() ?? throw new Exception("Failed to return page.");
 
     }
+
 
 }
