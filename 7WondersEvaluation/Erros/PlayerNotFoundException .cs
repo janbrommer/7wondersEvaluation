@@ -1,5 +1,5 @@
 using System;
-
+namespace _7WondersEvaluation.Errors;
 public class PlayerNotFoundException : Exception
 {
     public PlayerNotFoundException()
